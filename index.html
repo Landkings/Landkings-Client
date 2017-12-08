@@ -2,13 +2,20 @@
 
 <head>
     <body>
-        <!--<canvas id="myCanvas" width="1411" height="767"></canvas>-->
+        <div style="position: relative; float: right; left: -400">
+            <canvas id="playersCanvas" width="400" height="400" 
+                    style="position: absolute; top: 0; z-index: 2;"></canvas>
+            <canvas id="myCanvas" width="400" height="400" 
+                    style="background: lightblue; position: absolute;top: 0; z-index: 0;"></canvas>
+            <canvas id="obstaclesCanvas" width="400" height="400" 
+                    style="position: absolute; top: 0; z-index: 1;"></canvas>
+        </div>
         <p><textarea id="codeArea" rows="50" cols="100"></textarea></p>
-        <p><textarea id="nickArea" rows="1" cols="20"></textarea></p>
+        <p><textarea id="nickArea" rows="1" cols="20";"></textarea></p>
         <p><button id="sendButton" style="width: 50; height: 50;">Send code</button></p>
         <script src="socket.js"></script>
         <script src="form.js"></script>
-        <!--<script src="canvas.js"></script>-->
+        <script src="canvas.js"></script>
     </body>
 </head>
 
