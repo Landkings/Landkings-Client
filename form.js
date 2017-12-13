@@ -26,6 +26,7 @@ codeArea.onclick = function()
     }
 };
 
+/*
 nickArea = document.getElementById("nickArea");
 
 nickArea.onclick = function()
@@ -37,3 +38,4 @@ nickArea.onclick = function()
         firstNickClick = false;
     }
 }
+*/

@@ -1,0 +1,19 @@
+.code-form{
+	margin-top: 10px;
+}
+
+textarea{
+	resize: none;
+}
+
+.code-form button{
+	margin-top: 10px;
+}
+
+.health-bar{
+	margin-right: 41px;
+}
+
+.stamina-bar{
+	margin-right: 10px;
+}
