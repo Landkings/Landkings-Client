@@ -4,11 +4,13 @@
     <title>LandKings</title>
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="libraries/codemirror-5.32.0/lib/codemirror.css">
+    <script src="libraries/codemirror-5.32.0/lib/codemirror.js"></script>
+    <script src="libraries/codemirror-5.32.0/mode/lua/lua.js"></script>
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            
             <nav class="navbar navbar-default">
                 <div class="container">
                     <div class="navbar-header">
@@ -28,14 +30,15 @@
                     </div>
                 </div>
             </nav>
-        
         </div>
         <div class="row">
             <div class="col-lg-4 col-lg-offset-1 col-md-4 col-md-offset-1 col-sm-4 col-sm-offset-1 col-xs-12">
-                <form class="form-group code-form">
+                <form class="form-group code-form" method="post" action="handler.php">
                     <label for="codeArea">Поле для ввода кода:</label>
-                    <textarea id="codeArea" class="form-control" rows="29"></textarea>
-                    <button id="sendButton" class="btn btn-default">Send code</button>
+                    <textarea id="codeArea" class="form-control" name="code"></textarea>
+                    <label for="codeArea">Имя персонажа:</label>
+                    <input class="form-control" type="text" name="user">
+                    <button id="sendButton" class="btn btn-default" name="submit">Send code</button>
                 </form>
             </div>
             <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
@@ -65,6 +68,14 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        var editor = CodeMirror.fromTextArea(codeArea, {
+            lineNumbers: true,
+            mode: 'lua',
+            tabSize: 2,
+        });
+        editor.setSize($(this).width(), '600px');
+    </script>
     <script src="socket.js"></script>
     <script src="form.js"></script>
     <script src="canvas.js"></script>

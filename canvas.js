@@ -12,11 +12,11 @@ var tree = [ { x: 192, y : 432} ];
 var camera = { x : 0, y : 0 };
 
 function eventWindowLoaded () {
-  canvasApp();
+    canvasApp();
 }
 
 function canvasSupport (e) {
-      return !!e.getContext;
+    return !!e.getContext;
 }
 
 var tileMap = new Array();
@@ -95,30 +95,28 @@ function canvasApp () {
   }
 
 document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 37) {
-      camera.x += 10;
-        //console.log('Left was pressed');
+    if(event.keyCode == 37){
+        camera.x += 10;
     }
-    else if(event.keyCode == 39) {
-      camera.x -= 10;
-        //console.log('Right was pressed');
+    else if(event.keyCode == 39){
+        camera.x -= 10;
     }
-    else if (event.keyCode == 38) {
-      camera.y += 10;
+    else if (event.keyCode == 38){
+        camera.y += 10;
     }
-    else if (event.keyCode == 40) {
-      camera.y -= 10;
+    else if (event.keyCode == 40){
+        camera.y -= 10;
     }
     drawScreen();
 });
 
   function drawPlayers(players) {
-        plctx.beginPath();
-        plctx.clearRect(0, 0, playersCanvas.width, playersCanvas.height);
-        for (var i = 0; i < players.length; ++i) {
-            plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
-            //plctx.stroke();
-        }
+      plctx.beginPath();
+      plctx.clearRect(0, 0, playersCanvas.width, playersCanvas.height);
+      for (var i = 0; i < players.length; ++i) {
+          plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
+          //plctx.stroke();
+      }
   }
 
   function sleep(ms) {
