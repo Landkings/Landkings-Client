@@ -33,6 +33,7 @@ $("#nickname").keyup(function() {
       $("#stamina").empty();
       $("#health").css("width", "0%");
       $("#stamina").css("width", "0%");      
+  }
 });
 
 function eventWindowLoaded () {
