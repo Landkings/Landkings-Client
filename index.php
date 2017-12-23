@@ -9,11 +9,10 @@
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
         $result = curl_exec ($ch);
         curl_close ($ch);
-        print $result;
     }
-
 ?>
 <!doctype html5>
 <html>
