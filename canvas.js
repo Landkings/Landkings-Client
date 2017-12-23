@@ -126,18 +126,21 @@ document.addEventListener('keydown', function(event) {
         plctx.closePath();
         for (var i = 0; i < players.length; ++i) {
             plctx.beginPath();
+            plctx.fillStyle = "#fff";
+            plctx.fillStroke = "#000";
             plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
             plctx.closePath();
             plctx.beginPath();
             if ($("#nickname").val() == players[i].id){
-              plctx.fillStyle = "#ff3333";
+              plctx.fillStyle = "#3333ff";
               plctx.fillStroke = "#000";
+              plctx.font = "18px";
             }
             else{
               plctx.fillStyle = "#fff";
               plctx.fillStroke = "#000";
+              plctx.font = "14px";
             }
-            plctx.font = "14px";
             plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 10, players[i].y - 10 - camera.y - 5);
             plctx.closePath();
             if ($("#nickname").val() == players[i].id){
