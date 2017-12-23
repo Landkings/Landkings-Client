@@ -98,9 +98,9 @@ function canvasApp () {
       }
       y = y + dy;
     }
-    obsctx.beginPath();
-    obsctx.clearRect(0, 0, obstaclesCanvas.width, obstaclesCanvas.height);
-    obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, (256 - camera.x), (256 - camera.y), dx, dy);
+    //obsctx.beginPath();
+    //obsctx.clearRect(0, 0, obstaclesCanvas.width, obstaclesCanvas.height);
+    //obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, (256 - camera.x), (256 - camera.y), dx, dy);
   }
 
 document.addEventListener('keydown', function(event) {
@@ -125,6 +125,9 @@ document.addEventListener('keydown', function(event) {
         plctx.closePath();
         for (var i = 0; i < players.length; ++i) {
             plctx.beginPath();
+            plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
+            plctx.closePath();
+            plctx.beginPath();
             if ($("#nickname").val() == players[i].id){
               plctx.fillStyle = "#ff3333";
               plctx.fillStroke = "#000";
@@ -133,9 +136,6 @@ document.addEventListener('keydown', function(event) {
               plctx.fillStyle = "#fff";
               plctx.fillStroke = "#000";
             }
-            plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
-            plctx.closePath();
-            plctx.beginPath();
             plctx.fillStyle = "#fff";
             plctx.fillStroke = "#000";
             plctx.font = "14px";
