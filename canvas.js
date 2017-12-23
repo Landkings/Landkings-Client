@@ -17,6 +17,7 @@ $("#nickname").keyup(function() {
   for (var i = 0; i < all_players.length; ++i){
     if ($("#nickname").val() == all_players[i].id){
       $("#health").css("width", String(all_players[i].hp) + "%");
+      $("#stamina").css("width", String(all_players[i].stamina) + "%");
     }
   }
 });
