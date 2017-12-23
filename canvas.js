@@ -14,7 +14,7 @@ var camera = { x : 0, y : 0 };
 var all_players;
 
 $("#nickname").keyup(function() {
-  var falg = false;
+  var flag = false;
   for (var i = 0; i < all_players.length; ++i){
     if ($("#nickname").val() == all_players[i].id){
       flag = true;
@@ -137,8 +137,6 @@ document.addEventListener('keydown', function(event) {
               plctx.fillStyle = "#fff";
               plctx.fillStroke = "#000";
             }
-            plctx.fillStyle = "#fff";
-            plctx.fillStroke = "#000";
             plctx.font = "14px";
             plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 10, players[i].y - 10 - camera.y - 5);
             plctx.closePath();
