@@ -134,12 +134,12 @@ document.addEventListener('keydown', function(event) {
             if ($("#nickname").val() == players[i].id){
               plctx.fillStyle = "#3333ff";
               plctx.fillStroke = "#000";
-              plctx.font = "18px";
+              plctx.font = "bold 20px Arial";
             }
             else{
               plctx.fillStyle = "#fff";
               plctx.fillStroke = "#000";
-              plctx.font = "14px";
+              plctx.font = "14px Arial";
             }
             plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 10, players[i].y - 10 - camera.y - 5);
             plctx.closePath();
