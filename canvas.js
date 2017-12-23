@@ -14,8 +14,10 @@ var camera = { x : 0, y : 0 };
 var all_players;
 
 $("#nickname").keyup(function() {
+  var falg = false;
   for (var i = 0; i < all_players.length; ++i){
     if ($("#nickname").val() == all_players[i].id){
+      flag = true;
       $("#health").css("width", String(all_players[i].hp) + "%");
       $("#stamina").css("width", String(all_players[i].stamina) + "%");
       var max_health = all_players[i].maxHp;
@@ -26,6 +28,11 @@ $("#nickname").keyup(function() {
       $("#stamina").text(String(cur_stamina) + "/" + String(max_stamina));
     }
   }
+  if (!flag){
+      $("#health").empty();
+      $("#stamina").empty();
+      $("#health").css("width", "0%");
+      $("#stamina").css("width", "0%");      
 });
 
 function eventWindowLoaded () {
