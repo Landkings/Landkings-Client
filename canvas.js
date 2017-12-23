@@ -14,20 +14,7 @@ var camera = { x : 0, y : 0 };
 var all_players;
 
 $("#nickname").keyup(function() {
-  var flag = false;
-  for (var i = 0; i < all_players.length; ++i){
-    if ($("#nickname").val() == all_players[i].id){
-      flag = true;
-      $("#health").css("width", String(all_players[i].hp) + "%");
-      $("#stamina").css("width", String(all_players[i].stamina) + "%");
-      var max_health = all_players[i].maxHp;
-      var cur_health = all_players[i].hp;
-      var max_stamina = all_players[i].maxStamina;
-      var cur_stamina = all_players[i].stamina;
-      $("#health").text(String(cur_health) + "/" + String(max_health));
-      $("#stamina").text(String(cur_stamina) + "/" + String(max_stamina));
-    }
-  }
+  var flag = changeStatements(all_players);
   if (!flag){
       $("#health").empty();
       $("#stamina").empty();
@@ -124,7 +111,7 @@ document.addEventListener('keydown', function(event) {
         plctx.beginPath();
         plctx.clearRect(0, 0, playersCanvas.width, playersCanvas.height);
         plctx.closePath();
-        for (var i = 0; i < players.length; ++i) {
+        for (var i = 0; i < players.length; ++i){
             plctx.beginPath();
             plctx.fillStyle = "#fff";
             plctx.fillStroke = "#000";
@@ -132,9 +119,14 @@ document.addEventListener('keydown', function(event) {
             plctx.closePath();
             plctx.beginPath();
             if ($("#nickname").val() == players[i].id){
-              plctx.fillStyle = "#3333ff";
+              plctx.fillStyle = "#000";
               plctx.fillStroke = "#000";
-              plctx.font = "bold 20px Arial";
+              plctx.font = "bold 18px Arial";
+              plctx.fillText(players[i].id, players[i].x - 12 - camera.x - 10, players[i].y - 10 - camera.y - 5);
+              plctx.fillText(players[i].id, players[i].x - 8 - camera.x - 10, players[i].y - 10 - camera.y - 5);
+              plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 10, players[i].y - 10 - camera.y - 3);
+              plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 10, players[i].y - 10 - camera.y - 7);
+              plctx.fillStyle = "#f00";
             }
             else{
               plctx.fillStyle = "#fff";
@@ -143,18 +135,25 @@ document.addEventListener('keydown', function(event) {
             }
             plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 10, players[i].y - 10 - camera.y - 5);
             plctx.closePath();
-            if ($("#nickname").val() == players[i].id){
-              $("#health").css("width", String(players[i].hp) + "%");
-              $("#stamina").css("width", String(players[i].stamina) + "%");
-              var max_health = players[i].maxHp;
-              var cur_health = players[i].hp;
-              var max_stamina = players[i].maxStamina;
-              var cur_stamina = players[i].stamina;
-              $("#health").text(String(cur_health) + "/" + String(max_health));
-              $("#stamina").text(String(cur_stamina) + "/" + String(max_stamina));
-            }
-            //$("#stamina").css("width", String(players[i].hp) + "%");
         }
+  }
+
+  function changeStatements(players){
+    var flag = false;
+    for (var i = 0; i < players.length; ++i){
+      if ($("#nickname").val() == players[i].id){
+        flag = true;
+        $("#health").css("width", String(players[i].hp) + "%");
+        $("#stamina").css("width", String(players[i].stamina) + "%");
+        var max_health = players[i].maxHp;
+        var cur_health = players[i].hp;
+        var max_stamina = players[i].maxStamina;
+        var cur_stamina = players[i].stamina;
+        $("#health").text(String(cur_health) + "/" + String(max_health));
+        $("#stamina").text(String(cur_stamina) + "/" + String(max_stamina));
+      }
+    }
+    return flag;
   }
 
   function sleep(ms) {
@@ -165,7 +164,8 @@ document.addEventListener('keydown', function(event) {
         console.log(obj.messageType);
         if (obj.messageType == "loadObjects") {
             all_players = obj.players;
-            drawPlayers(obj.players);  
+            drawPlayers(obj.players);
+            changeStatements(obj.players);
         }
         else if (obj.messageType == "loadMap") {
           var arr = obj.tileMap;
