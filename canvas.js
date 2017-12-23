@@ -4,28 +4,42 @@ var tileSet = new Image();
 tileSet.onload = function () {
     console.log(tileSet.src);
 };
-
 tileSet.src = "data/tileSet";
-var grasses = [ { x: 0, y : 384}, {x : 48, y : 384} ];
+
+var grass = [ { x: 0, y : 384}, {x : 48, y : 384} ];
 var tree = [ { x: 192, y : 432} ];
 
 var camera = { x : 0, y : 0 };
 
+var all_players;
+
+$("#nickname").keyup(function() {
+  for (var i = 0; i < all_players.length; ++i){
+    if ($("#nickname").val() == all_players[i].id){
+      $("#health").css("width", String(all_players[i].hp) + "%");
+    }
+  }
+});
+
 function eventWindowLoaded () {
-    canvasApp();
+  canvasApp();
 }
 
 function canvasSupport (e) {
-    return !!e.getContext;
+      return !!e.getContext;
 }
 
-var tileMap = new Array();
-for (i = 0; i < width; i+=48) {
-  tileMap[i] = new Array();
-  for (j = 0; j < height; j+=48) {
-    tileMap[i][j] = Math.floor((Math.random() * 2));
-  }
-}
+var width = 4800;
+var height = 4800;
+
+var tileMap;
+//var tileMap = new Array(Math.floor(height / 48));
+//for (var i = 0; i * 48 < height; i++) {
+//  tileMap[i] = new Array(Math.floor(width / 48));
+//  for (var j = 0; j * 48 < width; j++) {
+//    tileMap[i][j] = Math.floor(Math.random() * 2);
+//  }
+//}
 
 function canvasApp () {
   var myCanvas = document.getElementById('myCanvas');
@@ -38,10 +52,10 @@ function canvasApp () {
   var plctx = playersCanvas.getContext('2d');
   var obsctx = obstaclesCanvas.getContext('2d');
   //ctx.save();
-  myCanvas.width = 600;//window.innerWidth;
-  myCanvas.height = 600;//window.innerHeight;
-  obstaclesCanvas.width = 600;//window.innerWidth;
-  obstaclesCanvas.height = 600;//window.innerHeight;
+  myCanvas.width = 600;
+  myCanvas.height = 600;
+  obstaclesCanvas.width = 600;
+  obstaclesCanvas.height = 600;
   playersCanvas.width = 600;
   playersCanvas.height = 600;
   //ctx.transform( 1, 0.5, -1, 0.5, 160, 0 );
@@ -50,99 +64,91 @@ function canvasApp () {
   //plctx.transform( 1, 0.5, -1, 0.5, 160, 0 );
 
 
-  function drawScreen () {
-    //ctx.restore();
+  function drawScreen() {
     ctx.beginPath();  
     ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-    //ctx.save();
     var dx = 48;
     var dy = 48;
-    var y = -48;
+    var y = 0;
     var w = myCanvas.width;
     var h = myCanvas.height;
-    //var   xy = 10;
     ctx.lineWidth = 1;
     while (y < h) {
       var x = camera.x;
       while (x < w) {
-        if (x - camera.x >= -48 && y - camera.y >= -48) {
-          //var tile = grasses[tileMap[Math.floor((x - camera.x) / 48)][Math.floor((y - camera.y) / 48)]];
-          var tile = grasses[0];
-          ctx.drawImage(tileSet, tile.x, tile.y, 48, 48, x - camera.x, y - camera.y, 48, 48);
+        if ((x - camera.x) >= 0 && (y - camera.y) >= 0 && (x - camera.x) <= width && (y - camera.y) <= height) {
+          var tile = grass[tileMap[Math.floor((x - camera.x) / dx)][Math.floor((y - camera.y) / dy)]];
+          ctx.drawImage(tileSet, tile.x, tile.y, dx, dy, x - camera.x, y - camera.y, dx, dy);
         }
-
-        //ctx.moveTo(x, y);
-        //ctx.lineTo(w, y);
-        //ctx.stroke();
-        //xy += 10;
         x = x + dx;
       }
       y = y + dy;
     }
-
-    //y = 0;
-    //xy = 10;
-    //while (x < w) {
-    //  x = x + dx;
-    //  ctx.moveTo(x, y);
-    //  ctx.lineTo(x, h);
-    //  ctx.stroke();
-    //  xy += 10;
-    //}
     obsctx.beginPath();
     obsctx.clearRect(0, 0, obstaclesCanvas.width, obstaclesCanvas.height);
-    obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - camera.y, 48, 48);
+    obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, (256 - camera.x), (256 - camera.y), dx, dy);
   }
 
 document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 37){
-        camera.x += 10;
+    if(event.keyCode == 37) {
+      camera.x -= 48;
     }
-    else if(event.keyCode == 39){
-        camera.x -= 10;
+    else if(event.keyCode == 39) {
+      camera.x += 48;
     }
-    else if (event.keyCode == 38){
-        camera.y += 10;
+    else if (event.keyCode == 38) {
+      camera.y -= 48;
     }
-    else if (event.keyCode == 40){
-        camera.y -= 10;
+    else if (event.keyCode == 40) {
+      camera.y += 48;
     }
     drawScreen();
 });
 
   function drawPlayers(players) {
-      plctx.beginPath();
-      plctx.clearRect(0, 0, playersCanvas.width, playersCanvas.height);
-      for (var i = 0; i < players.length; ++i) {
-          plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
-          //plctx.stroke();
-      }
+        plctx.beginPath();
+        plctx.clearRect(0, 0, playersCanvas.width, playersCanvas.height);
+        plctx.closePath();
+        for (var i = 0; i < players.length; ++i) {
+            plctx.beginPath();
+            plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
+            plctx.fillStyle = "#fff";
+            plctx.fillStroke = "#000";
+            plctx.font = "14px";
+            plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 10, players[i].y - 10 - camera.y - 5);
+            plctx.closePath();
+            if ($("#nickname").val() == players[i].id){
+              $("#health").css("width", String(players[i].hp) + "%");
+            }
+            //$("#stamina").css("width", String(players[i].hp) + "%");
+        }
   }
 
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-
-  //plctx.rect(players[i].x - 10, players[i].y - 10, 20, 20);
-  //plctx.stroke();
-
   socket.onmessage = function(event) {
-        //drawScreen();
-        //ctx.restore();      
         var obj = JSON.parse(event.data);
-        drawPlayers(obj.players);
-  };
-
-  async function demo() {
-    while (true) {
-        if (socket.readyState == 1) {
-            socket.send(JSON.stringify({"messageType" : "getCharacters"}));
+        console.log(obj.messageType);
+        if (obj.messageType == "loadObjects") {
+            all_players = obj.players;
+            drawPlayers(obj.players);  
         }
-        //console.log("Trying to sleep");
-        await sleep(32);
-    }
-  }
-  drawScreen();
-  //demo();
-  
+        else if (obj.messageType == "loadMap") {
+          var arr = obj.tileMap;
+          var ht = obj.height;
+          var wh = width = obj.width;
+          width = wh * 48;
+          height = ht * 48;
+          tileMap = new Array(Math.floor(height / 48));
+          for (var i = 0; i < ht; i++) {
+            tileMap[i] = new Array(Math.floor(width / 48));
+            for (var j = 0; j < wh; j++) {
+              tileMap[i][j] = arr[i * wh + j];
+            }
+          }
+          drawScreen();
+        }
+  };
+  //drawScreen();  
 }

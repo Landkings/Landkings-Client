@@ -1,4 +1,4 @@
-var socket = new WebSocket("ws://localhost:19999");
+var socket = new WebSocket("ws://10.193.31.203:19999");
 
 socket.onopen = function() 
 {
