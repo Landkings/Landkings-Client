@@ -118,7 +118,17 @@ document.addEventListener('keydown', function(event) {
         plctx.closePath();
         for (var i = 0; i < players.length; ++i) {
             plctx.beginPath();
+            if ($("#nickname").val() == players[i].id){
+              plctx.fillStyle = "#ff3333";
+              plctx.fillStroke = "#000";
+            }
+            else{
+              plctx.fillStyle = "#fff";
+              plctx.fillStroke = "#000";
+            }
             plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
+            plctx.closePath();
+            plctx.beginPath();
             plctx.fillStyle = "#fff";
             plctx.fillStroke = "#000";
             plctx.font = "14px";
