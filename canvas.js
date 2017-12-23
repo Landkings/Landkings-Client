@@ -76,23 +76,24 @@ function canvasApp () {
     var h = myCanvas.height;
     ctx.lineWidth = 1;
     while (y < h) {
-      var x = camera.x;
+      var x = 0;
       while (x < w) {
-        if ((x - camera.x) >= 0 && (y - camera.y) >= 0 && (x - camera.x) <= width && (y - camera.y) <= height) {
-          var tile = grass[tileMap[Math.floor((x - camera.x) / dx)][Math.floor((y - camera.y) / dy)]];
-          ctx.drawImage(tileSet, tile.x, tile.y, dx, dy, x - camera.x, y - camera.y, dx, dy);
+        if ((x + camera.x) >= 0 && (y + camera.y) >= 0 && (x + camera.x) <= width && (y + camera.y) <= height) {
+          var tile = grass[tileMap[Math.floor((x + camera.x) / dx)][Math.floor((y + camera.y) / dy)]];
+          ctx.drawImage(tileSet, tile.x, tile.y, dx, dy, x, y, dx, dy);
         }
         x = x + dx;
       }
       y = y + dy;
     }
-    //obsctx.beginPath();
-    //obsctx.clearRect(0, 0, obstaclesCanvas.width, obstaclesCanvas.height);
-    //obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, (256 - camera.x), (256 - camera.y), dx, dy);
+    obsctx.beginPath();
+    obsctx.clearRect(0, 0, obstaclesCanvas.width, obstaclesCanvas.height);
+    obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, (256 - camera.x), (256 - camera.y), dx, dy);
   }
 
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 37) {
+      console.log("kek");
       camera.x -= 48;
     }
     else if(event.keyCode == 39) {
