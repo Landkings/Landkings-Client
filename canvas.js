@@ -18,6 +18,12 @@ $("#nickname").keyup(function() {
     if ($("#nickname").val() == all_players[i].id){
       $("#health").css("width", String(all_players[i].hp) + "%");
       $("#stamina").css("width", String(all_players[i].stamina) + "%");
+      var max_health = all_players[i].maxHp;
+      var cur_health = all_players[i].hp;
+      var max_stamina = all_players[i].maxStamina;
+      var cur_stamina = all_players[i].stamina;
+      $("#health").text(String(cur_health) + "/" + String(max_health));
+      $("#stamina").text(String(cur_stamina) + "/" + String(max_stamina));
     }
   }
 });
@@ -120,6 +126,13 @@ document.addEventListener('keydown', function(event) {
             plctx.closePath();
             if ($("#nickname").val() == players[i].id){
               $("#health").css("width", String(players[i].hp) + "%");
+              $("#stamina").css("width", String(players[i].stamina) + "%");
+              var max_health = players[i].maxHp;
+              var cur_health = players[i].hp;
+              var max_stamina = players[i].maxStamina;
+              var cur_stamina = players[i].stamina;
+              $("#health").text(String(cur_health) + "/" + String(max_health));
+              $("#stamina").text(String(cur_stamina) + "/" + String(max_stamina));
             }
             //$("#stamina").css("width", String(players[i].hp) + "%");
         }
