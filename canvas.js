@@ -9,12 +9,12 @@ tileSet.src = "data/tileSet";
 var grass = [ { x: 0, y : 384}, {x : 48, y : 384} ];
 var tree = [ { x: 192, y : 432} ];
 
+var red_mushroom = [ { x: 576, y: 336} ];
+var mushroom = [ { x: 624, y: 336} ];
+
 var camera = { x : 0, y : 0 };
 
-var all_players;
-
-var prev_x = 0;
-var prev_y = 0;
+var all_players = [];
 
 function changeStatements(players){
   var flag = false;
@@ -137,25 +137,37 @@ document.addEventListener('keydown', function(event) {
     drawScreen();
 });
 
+/*
+obsctx.beginPath();
+obsctx.clearRect(0, 0, obstaclesCanvas.width, obstaclesCanvas.height);
+obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - camera.y, 48, 48);
+*/
+
   function drawPlayers(players) {
         plctx.beginPath();
         plctx.clearRect(0, 0, playersCanvas.width, playersCanvas.height);
         plctx.closePath();
         for (var i = 0; i < players.length; ++i){
             plctx.beginPath();
-            plctx.fillStyle = "#fff";
-            plctx.fillStroke = "#000";
-            plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
+            //plctx.fillStyle = "#fff";
+            //plctx.fillStroke = "#000";
+            //plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
+            if ($("#nickname").val() == players[i].id){
+              plctx.drawImage(tileSet, red_mushroom[0].x, red_mushroom[0].y, 48, 48, players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 48, 48);
+            }
+            else{
+              plctx.drawImage(tileSet, mushroom[0].x, mushroom[0].y, 48, 48, players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 48, 48);
+            }
             plctx.closePath();
             plctx.beginPath();
             if ($("#nickname").val() == players[i].id){
               plctx.fillStyle = "#000";
               plctx.fillStroke = "#000";
               plctx.font = "bold 18px Arial";
-              plctx.fillText(players[i].id, players[i].x - 12 - camera.x - 10, players[i].y - 10 - camera.y - 5);
-              plctx.fillText(players[i].id, players[i].x - 8 - camera.x - 10, players[i].y - 10 - camera.y - 5);
-              plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 10, players[i].y - 10 - camera.y - 3);
-              plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 10, players[i].y - 10 - camera.y - 7);
+              plctx.fillText(players[i].id, players[i].x - 12 - camera.x - 5, players[i].y - 5 - camera.y - 5);
+              plctx.fillText(players[i].id, players[i].x - 8 - camera.x - 5, players[i].y - 5 - camera.y - 5);
+              plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 5, players[i].y - 5 - camera.y - 3);
+              plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 5, players[i].y - 5 - camera.y - 7);
               plctx.fillStyle = "#f00";
             }
             else{
@@ -163,7 +175,7 @@ document.addEventListener('keydown', function(event) {
               plctx.fillStroke = "#000";
               plctx.font = "14px Arial";
             }
-            plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 10, players[i].y - 10 - camera.y - 5);
+            plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 5, players[i].y - 10 - camera.y);
             plctx.closePath();
         }
   }
