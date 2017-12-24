@@ -69,6 +69,15 @@
             </div>
         </div>
     </div>
+    <div class="container-fluid">
+        <div class="row players-list">
+            <div class="col-lg-6 col-md-6 col-lg-offset-3 col-md-offset-3">
+                <h4 align="center">Персонажи на сервере:</h4>
+                <div id="list_players" class="row">
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="jquery-3.2.1.js"></script>
     <script type="text/javascript">
         var editor = CodeMirror.fromTextArea(codeArea, {
@@ -94,37 +103,6 @@
                 }
             );
         });
-        /*
-        $("#sendButton").click(function(){
-
-            var xhr = new XMLHttpRequest();
-
-            xhr.open('POST', 'http://5.100.86.249:19997', true);
-            
-            var nick = $("#nickname").val();   
-            var code = editor.getValue();
-
-            xhr.setRequestHeader('nickname', String(nick));
-            xhr.setRequestHeader('secret', '3435');
-            xhr.send(String(code));
-
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState != 4) return;
-
-                $("#sendButton").text('Done!');
-
-                if (xhr.status != 200)
-                    alert(xhr.status + ': ' + xhr.statusText);
-                else
-                    alert(xhr.responseText);
-
-            }
-
-            $("#sendButton").text('Sending...');
-            $("#sendButton").prop('disabled', true);
-            $("#nickname").prop('disabled', true);
-        });
-        */
     </script>
     <script src="socket.js"></script>
     <!--<script src="form.js"></script>-->
