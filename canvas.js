@@ -13,6 +13,29 @@ var camera = { x : 0, y : 0 };
 
 var all_players;
 
+var prev_x = 0;
+var prev_y = 0;
+
+function changeStatements(players){
+  var flag = false;
+  for (var i = 0; i < players.length; ++i){
+    if ($("#nickname").val() == players[i].id){
+      prev_y = players[i].y;
+      prev_x = players[i].x;
+      flag = true;
+      $("#health").css("width", String(players[i].hp) + "%");
+      $("#stamina").css("width", String(players[i].stamina) + "%");
+      var max_health = players[i].maxHp;
+      var cur_health = players[i].hp;
+      var max_stamina = players[i].maxStamina;
+      var cur_stamina = players[i].stamina;
+      $("#health").text(String(cur_health) + "/" + String(max_health));
+      $("#stamina").text(String(cur_stamina) + "/" + String(max_stamina));
+    }
+  }
+  return flag;
+}
+
 $("#nickname").keyup(function() {
   var flag = changeStatements(all_players);
   if (!flag){
@@ -66,33 +89,40 @@ function canvasApp () {
   //plctx.transform( 1, 0.5, -1, 0.5, 160, 0 );
 
 
+
   function drawScreen() {
+    var players_x = 0;
+    var players_y = 0;
+    for (var i = 0; i < all_players.length; i++){
+      if (all_players[i].id == $("#nickname").val()){
+        camera.x = all_players[i].x - 290;
+        camera.y = all_players[i].y - 290;
+      }
+    }
     ctx.beginPath();  
     ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
     var dx = 48;
     var dy = 48;
-    var y = 0;
+    var y = (-camera.y % dy);
     var w = myCanvas.width;
     var h = myCanvas.height;
     ctx.lineWidth = 1;
     while (y < h) {
-      var x = camera.x;
+      var x = -(camera.x % dx);
       while (x < w) {
-        if ((x - camera.x) >= 0 && (y - camera.y) >= 0 && (x - camera.x) <= width && (y - camera.y) <= height) {
-          var tile = grass[tileMap[Math.floor((x - camera.x) / dx)][Math.floor((y - camera.y) / dy)]];
-          ctx.drawImage(tileSet, tile.x, tile.y, dx, dy, x - camera.x, y - camera.y, dx, dy);
+        if ((x + camera.x) >= 0 && (y + camera.y) >= 0 && (x + camera.x) <= width && (y + camera.y) <= height) {
+          var tile = grass[tileMap[Math.floor((x + camera.x) / dx)][Math.floor((y + camera.y) / dy)]];
+          ctx.drawImage(tileSet, tile.x, tile.y, dx, dy, x, y, dx, dy);
         }
         x = x + dx;
       }
       y = y + dy;
     }
-    //obsctx.beginPath();
-    //obsctx.clearRect(0, 0, obstaclesCanvas.width, obstaclesCanvas.height);
-    //obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, (256 - camera.x), (256 - camera.y), dx, dy);
   }
 
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 37) {
+      console.log("kek");
       camera.x -= 48;
     }
     else if(event.keyCode == 39) {
@@ -138,24 +168,6 @@ document.addEventListener('keydown', function(event) {
         }
   }
 
-  function changeStatements(players){
-    var flag = false;
-    for (var i = 0; i < players.length; ++i){
-      if ($("#nickname").val() == players[i].id){
-        flag = true;
-        $("#health").css("width", String(players[i].hp) + "%");
-        $("#stamina").css("width", String(players[i].stamina) + "%");
-        var max_health = players[i].maxHp;
-        var cur_health = players[i].hp;
-        var max_stamina = players[i].maxStamina;
-        var cur_stamina = players[i].stamina;
-        $("#health").text(String(cur_health) + "/" + String(max_health));
-        $("#stamina").text(String(cur_stamina) + "/" + String(max_stamina));
-      }
-    }
-    return flag;
-  }
-
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -164,6 +176,7 @@ document.addEventListener('keydown', function(event) {
         console.log(obj.messageType);
         if (obj.messageType == "loadObjects") {
             all_players = obj.players;
+            drawScreen();
             drawPlayers(obj.players);
             changeStatements(obj.players);
         }
