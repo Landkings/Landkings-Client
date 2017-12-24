@@ -1,20 +1,3 @@
-<?php
-    if (isset($_POST['submit'])){
-        $data = $_POST['code'];
-        $nickname = $_POST['user'];
-        $secret = '3435';
-        
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "http://5.100.86.249:19997");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("nickname: $nickname", "secret: $secret"));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 1);
-        $result = curl_exec ($ch);
-        curl_close ($ch);
-    }
-?>
 <!doctype html5>
 <html>
 <head>
@@ -51,13 +34,13 @@
         </div>
         <div class="row">
             <div class="col-lg-4 col-lg-offset-1 col-md-4 col-md-offset-1 col-sm-4 col-sm-offset-1 col-xs-12">
-                <form class="form-group code-form" method="post" action="index.php">
+                <div class="form-group code-form">
                     <label for="codeArea">Поле для ввода кода:</label>
                     <textarea id="codeArea" class="form-control" name="code"></textarea>
                     <label for="nickname">Имя персонажа:</label>
                     <input id="nickname" class="form-control" type="text" name="user">
                     <button id="sendButton" class="btn btn-default" name="submit">Send code</button>
-                </form>
+                </div>
             </div>
             <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
                 <div class="all-canvases">
@@ -95,7 +78,24 @@
         });
     </script>
     <script>
-        /*$("#sendButton").click(function(){
+        $("#sendButton").click(function(){
+            var nick = $("#nickname").val();   
+            var code = editor.getValue();
+            $("#sendButton").text('Sending...');
+            $("#sendButton").prop('disabled', true);
+            $("#nickname").prop('disabled', true);
+            $.post("http://progra2r.bget.ru/handler.php", 
+                {
+                    nick: nick, 
+                    code: code
+                }, 
+                function(data){
+                    $("#sendButton").text('Done!');
+                }
+            );
+        });
+        /*
+        $("#sendButton").click(function(){
 
             var xhr = new XMLHttpRequest();
 
@@ -105,7 +105,7 @@
             var code = editor.getValue();
 
             xhr.setRequestHeader('nickname', String(nick));
-            xhr.setRequestHeader('secret', '3445');
+            xhr.setRequestHeader('secret', '3435');
             xhr.send(String(code));
 
             xhr.onreadystatechange = function() {
@@ -113,18 +113,18 @@
 
                 $("#sendButton").text('Done!');
 
-                if (xhr.status != 200) {
+                if (xhr.status != 200)
                     alert(xhr.status + ': ' + xhr.statusText);
-                } else {
+                else
                     alert(xhr.responseText);
-                }
 
             }
 
             $("#sendButton").text('Sending...');
             $("#sendButton").prop('disabled', true);
             $("#nickname").prop('disabled', true);
-        });*/
+        });
+        */
     </script>
     <script src="socket.js"></script>
     <!--<script src="form.js"></script>-->
