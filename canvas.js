@@ -6,6 +6,17 @@ tileSet.onload = function () {
 };
 tileSet.src = "data/tileSet";
 
+var knightSet = new Image();
+knightSet.onload = function () {
+    console.log(knightSet.src);
+};
+knightSet.src = "data/knight_asset.png";
+
+var knight_up    = [ { x: 81, y: 0} ];
+var knight_down  = [ { x: 0,  y: 0} ];
+var knight_left  = [ { x: 27, y: 0} ];
+var knight_right = [ { x: 54, y: 0} ];
+
 var grass = [ { x: 0, y : 384}, {x : 48, y : 384} ];
 var tree = [ { x: 192, y : 432} ];
 
@@ -15,6 +26,8 @@ var mushroom = [ { x: 624, y: 336} ];
 var camera = { x : 0, y : 0 };
 
 var all_players = [];
+
+var prev_x, prev_y;
 
 function changeStatements(players){
   var flag = false;
@@ -153,7 +166,20 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
             //plctx.fillStroke = "#000";
             //plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
             if ($("#nickname").val() == players[i].id){
-              plctx.drawImage(tileSet, red_mushroom[0].x, red_mushroom[0].y, 48, 48, players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 48, 48);
+              var dx = prev_x - players[i].x;
+              var dy = prev_y - players[i].y;
+              prev_x = players[i].x;
+              prev_y = players[i].y;
+              if (dx < 0)
+                dx = knight_right[0].x;
+              else if (dx > 0)
+                dx = knight_left[0].x;
+              else if (dy > 0)
+                dx = knight_up[0].x;
+              else
+                dx = knight_down[0].x;
+              dy = 0;
+              plctx.drawImage(knightSet, dx, dy, 27, 32, players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 27, 32);
             }
             else{
               plctx.drawImage(tileSet, mushroom[0].x, mushroom[0].y, 48, 48, players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 48, 48);
