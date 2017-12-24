@@ -2,10 +2,11 @@
     if (isset($_POST['submit'])){
         $data = $_POST['code'];
         $nickname = $_POST['user'];
+        $secret = '3435';
         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "http://5.100.86.249:19997");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array("nickname: $nickname"));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("nickname: $nickname", "secret: $secret"));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
@@ -104,6 +105,7 @@
             var code = editor.getValue();
 
             xhr.setRequestHeader('nickname', String(nick));
+            xhr.setRequestHeader('secret', '3445');
             xhr.send(String(code));
 
             xhr.onreadystatechange = function() {
@@ -121,6 +123,7 @@
 
             $("#sendButton").text('Sending...');
             $("#sendButton").prop('disabled', true);
+            $("#nickname").prop('disabled', true);
         });*/
     </script>
     <script src="socket.js"></script>
