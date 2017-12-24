@@ -79,6 +79,7 @@
         </div>
     </div>
     <script src="jquery-3.2.1.js"></script>
+    <script src="canvas.js"></script>
     <script type="text/javascript">
         var editor = CodeMirror.fromTextArea(codeArea, {
             lineNumbers: true,
@@ -87,8 +88,21 @@
         });
     </script>
     <script>
+        setInterval(createListPlayers, 1000);
+        function createPlayerLink(word){
+          $("#nickname").empty();
+          $("#nickname").val(word);
+        }
         $("#sendButton").click(function(){
-            var nick = $("#nickname").val();   
+            var nick = $("#nickname").val(); 
+            if (nick.length < 4){
+                alert("Давайте введем ник подлиннее, а? Хотя бы символа 4.");
+                return;
+            } 
+            if (nick.length > 25){
+                alert("Давайте без фанатизма. 25 символов в никнейме максимум.");
+                return;
+            }
             var code = editor.getValue();
             $("#sendButton").text('Sending...');
             $("#sendButton").prop('disabled', true);
@@ -106,6 +120,5 @@
     </script>
     <script src="socket.js"></script>
     <!--<script src="form.js"></script>-->
-    <script src="canvas.js"></script>
 </body>
 </html>

@@ -64,7 +64,7 @@ function eventWindowLoaded () {
 }
 
 function canvasSupport (e) {
-      return !!e.getContext;
+  return !!e.getContext;
 }
 
 var width = 4800;
@@ -78,6 +78,19 @@ var tileMap;
 //    tileMap[i][j] = Math.floor(Math.random() * 2);
 //  }
 //}
+
+
+
+function createListPlayers(){
+  $("#list_players").empty();
+  for (var i = 0; i < all_players.length; i++){
+    if ($("#nickname").val() == all_players[i].id){
+      $("#list_players").append("<div class='col-lg-4 col-md-4'><p class='text-muted' style='color: #f00;'>" + all_players[i].id + "</p></div>");
+    }
+    else
+      $("#list_players").append('<div class="col-lg-4 col-md-4" onClick="createPlayerLink(\'' + all_players[i].id + '\');"><p class="text-muted">' + all_players[i].id + "</p></div>");
+  }
+}
 
 function canvasApp () {
   var myCanvas = document.getElementById('myCanvas');
@@ -206,17 +219,6 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
         }
   }
 
-  function createListPlayers(){
-    $("#list_players").empty();
-    for (var i = 0; i < all_players.length; i++){
-      if ($("#nickname").val() == all_players[i].id){
-        $("#list_players").append("<div class='col-lg-4 col-md-4'><p class='text-muted' style='color: #f00;'>" + all_players[i].id + "</p></div>");
-      }
-      else
-        $("#list_players").append("<div class='col-lg-4 col-md-4'><p class='text-muted'>" + all_players[i].id + "</p></div>");
-    }
-  }
-
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -225,7 +227,6 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
         console.log(obj.messageType);
         if (obj.messageType == "loadObjects") {
             all_players = obj.players;
-            createListPlayers();
             drawScreen();
             drawPlayers(obj.players);
             changeStatements(obj.players);
