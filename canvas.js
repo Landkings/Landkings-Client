@@ -37,11 +37,11 @@ function changeStatements(players){
       prev_x = players[i].x;
       flag = true;
       $("#health").css("width", String(players[i].hp) + "%");
-      $("#stamina").css("width", String(players[i].stamina) + "%");
-      var max_health = players[i].maxHp;
+      $("#stamina").css("width", String(players[i].st) + "%");
+      var max_health = players[i].mhp;
       var cur_health = players[i].hp;
-      var max_stamina = players[i].maxStamina;
-      var cur_stamina = players[i].stamina;
+      var max_stamina = players[i].mst;
+      var cur_stamina = players[i].st;
       $("#health").text(String(cur_health) + "/" + String(max_health));
       $("#stamina").text(String(cur_stamina) + "/" + String(max_stamina));
     }
@@ -136,8 +136,8 @@ function canvasApp () {
     while (y < h) {
       var x = -(camera.x % dx);
       while (x < w) {
-        if ((x + camera.x) >= 0 && (y + camera.y) >= 0 && (x + camera.x) <= width && (y + camera.y) <= height) {
-          var tile = grass[tileMap[Math.floor((x + camera.x) / dx)][Math.floor((y + camera.y) / dy)]];
+        if ((x + camera.x) >= 0 && (y + camera.y) >= 0 && (x + camera.x) < width && (y + camera.y) < height) {
+          var tile = grass[tileMap[Math.floor((y + camera.y) / dy)][Math.floor((x + camera.x) / dx)]];
           ctx.drawImage(tileSet, tile.x, tile.y, dx, dy, x, y, dx, dy);
         }
         x = x + dx;
