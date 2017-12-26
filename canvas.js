@@ -83,12 +83,14 @@ var tileMap;
 
 function createListPlayers(){
   $("#list_players").empty();
+  $("#cnt_of_players").empty();
+  $("#cnt_of_players").append("(" + all_players.length + ")");
   for (var i = 0; i < all_players.length; i++){
     if ($("#nickname").val() == all_players[i].id){
-      $("#list_players").append("<div class='col-lg-4 col-md-4'><p class='text-muted' style='color: #f00;'>" + all_players[i].id + "</p></div>");
+      $("#list_players").append("<div class='col-lg-2 col-md-2'><p class='text-muted' style='color: #f00;' align='center'><strong>" + all_players[i].id + "</strong></p></div>");
     }
     else
-      $("#list_players").append('<div class="col-lg-4 col-md-4" onClick="createPlayerLink(\'' + all_players[i].id + '\');"><p class="text-muted">' + all_players[i].id + "</p></div>");
+      $("#list_players").append('<div class="col-lg-2 col-md-2" onClick="createPlayerLink(\'' + all_players[i].id + '\');"><p class="text-muted" align="center" class="nicks"><strong><font color="#476dd6">' + all_players[i].id + "</font></strong></p></div>");
   }
 }
 

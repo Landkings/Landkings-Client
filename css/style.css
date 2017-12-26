@@ -1,3 +1,7 @@
+html{
+	overflow-x: hidden;
+}
+
 .code-form{
 	margin-top: 10px;
 }
@@ -18,11 +22,22 @@ textarea{
 	margin-right: 10px;
 }
 
+.info_bar{
+	margin-bottom: 10px;
+	margin-left: 30px;
+	margin-right: 20px;
+}
+
 .players-list{
 	border: 2px solid #ccc;
 	border-radius: 10px 10px 10px 10px;
 	padding: 7px;
-	margin-bottom: 10px;
-	margin-left: 20px;
-	margin-right: 20px;
 }
+
+.nicks{
+	cursor: pointer;;
+}
+
+.nicks:hover{
+	text-decoration: underline;
+};
