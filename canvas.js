@@ -87,10 +87,10 @@ function createListPlayers(){
   $("#cnt_of_players").append("(" + all_players.length + ")");
   for (var i = 0; i < all_players.length; i++){
     if ($("#nickname").val() == all_players[i].id){
-      $("#list_players").append("<div class='col-lg-2 col-md-2'><p class='text-muted' style='color: #f00;' align='center'><strong>" + all_players[i].id + "</strong></p></div>");
+      $("#list_players").append("<div class='col-lg-2 col-md-2'><p class='text-muted' style='color: #f00;' align='center'><strong>" + all_players[i].id + "</strong><br>(x:" + all_players[i].x + ", y:" + all_players[i].y + ")</p></div>");
     }
     else
-      $("#list_players").append('<div class="col-lg-2 col-md-2" onClick="createPlayerLink(\'' + all_players[i].id + '\');"><p class="text-muted" align="center" class="nicks"><strong><font color="#476dd6">' + all_players[i].id + "</font></strong></p></div>");
+      $("#list_players").append('<div class="col-lg-2 col-md-2" onClick="createPlayerLink(\'' + all_players[i].id + '\');"><p class="text-muted" align="center" class="nicks"><strong><font color="#476dd6">' + all_players[i].id + "</font></strong><br>(x:" + all_players[i].x + ", y:" + all_players[i].y + ")</p></div>");
   }
 }
 
@@ -171,34 +171,23 @@ obsctx.clearRect(0, 0, obstaclesCanvas.width, obstaclesCanvas.height);
 obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - camera.y, 48, 48);
 */
 
+  function get_knight_offset_x(sid){
+    if (sid == 0) return knight_up[0].x;
+    if (sid == 1) return knight_right[0].x;
+    if (sid == 2) return knight_down[0].x;
+    if (sid == 3) return knight_left[0].x;
+  }
+
   function drawPlayers(players) {
         plctx.beginPath();
         plctx.clearRect(0, 0, playersCanvas.width, playersCanvas.height);
         plctx.closePath();
         for (var i = 0; i < players.length; ++i){
             plctx.beginPath();
-            //plctx.fillStyle = "#fff";
-            //plctx.fillStroke = "#000";
-            //plctx.fillRect(players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 20, 20);
-            if ($("#nickname").val() == players[i].id){
-              var dx = prev_x - players[i].x;
-              var dy = prev_y - players[i].y;
-              prev_x = players[i].x;
-              prev_y = players[i].y;
-              if (dx < 0)
-                dx = knight_right[0].x;
-              else if (dx > 0)
-                dx = knight_left[0].x;
-              else if (dy > 0)
-                dx = knight_up[0].x;
-              else
-                dx = knight_down[0].x;
-              dy = 0;
-              plctx.drawImage(knightSet, dx, dy, 27, 32, players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 27, 32);
-            }
-            else{
-              plctx.drawImage(tileSet, mushroom[0].x, mushroom[0].y, 48, 48, players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 48, 48);
-            }
+
+
+            plctx.drawImage(knightSet, get_knight_offset_x(players[i].sid), 0, 27, 32, players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 27, 32);
+            
             plctx.closePath();
             plctx.beginPath();
             if ($("#nickname").val() == players[i].id){

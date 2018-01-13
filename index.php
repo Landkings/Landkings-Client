@@ -1,3 +1,9 @@
+<?php
+    session_start();
+    if (isset($_SESSION['login'])){
+        header("Location: game.php");
+    }
+?>
 <!doctype html5>
 <html>
 <head>
@@ -8,6 +14,45 @@
     <meta charset="utf-8">
     <script src="libraries/codemirror-5.32.0/lib/codemirror.js"></script>
     <script src="libraries/codemirror-5.32.0/mode/lua/lua.js"></script>
+
+    <style>
+        .popUp {
+            top: 12%; 
+            left: 45%; 
+            height: 300px;
+            position: fixed;
+            width: 500px;  
+            border-radius: 11px;
+            background: #fef; 
+            margin-left: -150px;    
+            margin-top: -100px;
+            display: none; 
+            opacity: 0;
+            padding: 17px;
+            z-index: 6;
+        }
+        .popUp #close {
+        cursor: pointer;
+            position: absolute;
+            width: 23px;
+            height: 23px;
+            top: 17px;
+            right: 17px;
+            display: block;
+        }
+        #overlay {
+            z-index:4; 
+            background-color:#010; 
+            position:fixed; 
+            opacity:0.86;
+            width:100%; 
+            height:100%;
+            display:none; 
+            top:0;
+            left:0;
+        }
+    </style>
+
 </head>
 <body>
     <div class="container-fluid">
@@ -20,119 +65,107 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">LandKings</a>
+                        <a class="navbar-brand" href="index.php">LandKings</a>
                     </div>
                     <div class="collapse navbar-collapse" id="navbar-main">
                         <ul class="nav navbar-nav pull-right">
-                            <li class="active"><a href="#">Главная</a></li>
-                            <li><a href="#">Регистрация</a></li>
-                            <li><a href="#">Вход</a></li>
+                            <li class="active"><a href="index.php">Главная</a></li>
                         </ul>
                     </div>
                 </div>
             </nav>
         </div>
+    </div>
+    
+    <div class="container">
         <div class="row">
-            <div class="col-lg-4 col-lg-offset-1 col-md-4 col-md-offset-1 col-sm-4 col-sm-offset-1 col-xs-12">
-                <div class="form-group code-form">
-                    <label for="codeArea">Поле для ввода кода:</label>
-                    <textarea id="codeArea" class="form-control" name="code"></textarea>
-                    <label for="nickname">Имя персонажа:</label>
-                    <input id="nickname" class="form-control" type="text" name="user">
-                    <button id="sendButton" class="btn btn-default" name="submit">Send code</button>
-                </div>
+            <div class="col-lg-12">
+                <h3>Добро пожаловать в LandKings, странник</h3>
+                <h4>Ты уже записался в наши ряды? Сделай это зарегистрировашись или назовись, я найду тебя в списке</h4>
             </div>
-            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
-                <div class="all-canvases">
-                    <canvas id="playersCanvas" width="600" height="600" style="position: absolute; top: 35; z-index: 2;"></canvas>
-                    <canvas id="myCanvas" width="600" height="600" style="background: lightblue; position: absolute; top: 35; z-index: 0;"></canvas>
-                    <canvas id="obstaclesCanvas" width="600" height="600" style="position: absolute; top: 35; z-index: 1;"></canvas>
-                </div>
-                <div class="row">
-                    <div class="col-lg-5 col-md-6 col-sm-8 col-xs-12" style="margin-top: 650px;">
-                        <p class="text-danger pull-left health-bar">Здоровье: </p>
-                        <div class="progress">
-                            <div id="health" class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">  
-                            </div>  
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-5 col-md-6 col-sm-8 col-xs-12">
-                        <p class="text-success pull-left stamina-bar">Выносливость: </p>
-                        <div class="progress">
-                            <div id="stamina" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"> 
-                            </div>  
-                        </div>
-                    </div>
-                </div>
+            <div class="col-lg-12">
+                <button class="btn btn-default" id="login">Войти</button>
+                <button class="btn btn-success" id="reg">Зарегистрироваться</button>
             </div>
         </div>
     </div>
-    <br>
-    <div class="container-fluid info_bar">
-        <div class="row">
-            <div class="col-lg-8 col-md-8 players-list">
-                <h4 align="center"><strong>Персонажи на сервере: <font id="cnt_of_players" color="#0047ab"></font></strong></h4><hr>
-                <div id="list_players" class="row">
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4">
-                <div class="row">
-                    <h4 align="center"><strong>Шаблоны:</strong></h4>
-                    <div class="col-lg-12 col-md-12">
-                        <h4 align="center">Персонаж ходит по квадрату</h4>
-                        <pre class="lua" style="font-family:monospace;"><ol><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">a <span style="color: #66cc66;">=</span> <span style="color: #cc66cc;">0</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">border <span style="color: #66cc66;">=</span> <span style="color: #cc66cc;">100</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #aa9900; font-weight: bold;">function</span> move<span style="color: #66cc66;">&#40;</span>scene<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    setAction<span style="color: #66cc66;">&#40;</span>Action<span style="color: #66cc66;">.</span>Move<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: bold; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">if</span> a <span style="color: #66cc66;">&lt;</span> border <span style="color: #aa9900; font-weight: bold;">then</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">        setDirection<span style="color: #66cc66;">&#40;</span>Direction<span style="color: #66cc66;">.</span>Right<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">elseif</span> a <span style="color: #66cc66;">&lt;</span> border <span style="color: #66cc66;">*</span> <span style="color: #cc66cc;">2</span> <span style="color: #aa9900; font-weight: bold;">then</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">        setDirection<span style="color: #66cc66;">&#40;</span>Direction<span style="color: #66cc66;">.</span>Down<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">elseif</span> a <span style="color: #66cc66;">&lt;</span> border <span style="color: #66cc66;">*</span> <span style="color: #cc66cc;">3</span> <span style="color: #aa9900; font-weight: bold;">then</span></div></li><li style="font-weight: bold; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">        setDirection<span style="color: #66cc66;">&#40;</span>Direction<span style="color: #66cc66;">.</span>Left<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">elseif</span> a <span style="color: #66cc66;">&lt;</span> border <span style="color: #66cc66;">*</span> <span style="color: #cc66cc;">4</span> <span style="color: #aa9900; font-weight: bold;">then</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">        setDirection<span style="color: #66cc66;">&#40;</span>Direction<span style="color: #66cc66;">.</span>Up<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">end</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    a <span style="color: #66cc66;">=</span> <span style="color: #66cc66;">&#40;</span>a <span style="color: #66cc66;">+</span> <span style="color: #cc66cc;">1</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">%</span> <span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">4</span> <span style="color: #66cc66;">*</span> border<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: bold; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #aa9900; font-weight: bold;">end</span></div></li></ol></pre>
-                    </div>
-                    <div class="col-lg-12 col-md-12">
-                        <h4 align="center">Персонаж ходит по змейке?!</h4>
-                        <pre class="lua" style="font-family:monospace;"><ol><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">a <span style="color: #66cc66;">=</span> <span style="color: #cc66cc;">0</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">border <span style="color: #66cc66;">=</span> <span style="color: #cc66cc;">100</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #aa9900; font-weight: bold;">function</span> move<span style="color: #66cc66;">&#40;</span>scene<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    setAction<span style="color: #66cc66;">&#40;</span>Action<span style="color: #66cc66;">.</span>Move<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: bold; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">if</span> a <span style="color: #66cc66;">&lt;</span> border <span style="color: #aa9900; font-weight: bold;">then</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">        setDirection<span style="color: #66cc66;">&#40;</span>Direction<span style="color: #66cc66;">.</span>Up<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">elseif</span> a <span style="color: #66cc66;">&lt;</span> <span style="color: #cc66cc;">2</span> <span style="color: #66cc66;">*</span> border <span style="color: #aa9900; font-weight: bold;">then</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">        setDirection<span style="color: #66cc66;">&#40;</span>Direction<span style="color: #66cc66;">.</span>Right<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">elseif</span> a <span style="color: #66cc66;">&lt;</span> <span style="color: #cc66cc;">3</span> <span style="color: #66cc66;">*</span> border <span style="color: #aa9900; font-weight: bold;">then</span></div></li><li style="font-weight: bold; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">        setDirection<span style="color: #66cc66;">&#40;</span>Direction<span style="color: #66cc66;">.</span>Left<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">elseif</span> a <span style="color: #66cc66;">&lt;</span> <span style="color: #cc66cc;">5</span> <span style="color: #66cc66;">*</span> border <span style="color: #aa9900; font-weight: bold;">then</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">        setDirection<span style="color: #66cc66;">&#40;</span>Direction<span style="color: #66cc66;">.</span>Down<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">elseif</span> a <span style="color: #66cc66;">&lt;</span> <span style="color: #cc66cc;">6</span> <span style="color: #66cc66;">*</span> border <span style="color: #aa9900; font-weight: bold;">then</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">        setDirection<span style="color: #66cc66;">&#40;</span>Direction<span style="color: #66cc66;">.</span>Left<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: bold; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">elseif</span> a <span style="color: #66cc66;">&lt;</span> <span style="color: #cc66cc;">7</span> <span style="color: #66cc66;">*</span> border <span style="color: #aa9900; font-weight: bold;">then</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">        setDirection<span style="color: #66cc66;">&#40;</span>Direction<span style="color: #66cc66;">.</span>Right<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">elseif</span> a <span style="color: #66cc66;">&lt;</span> <span style="color: #cc66cc;">8</span> <span style="color: #66cc66;">*</span> border <span style="color: #aa9900; font-weight: bold;">then</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">        setDirection<span style="color: #66cc66;">&#40;</span>Direction<span style="color: #66cc66;">.</span>Up<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    <span style="color: #aa9900; font-weight: bold;">end</span></div></li><li style="font-weight: bold; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;">    a <span style="color: #66cc66;">=</span> <span style="color: #66cc66;">&#40;</span>a <span style="color: #66cc66;">+</span> <span style="color: #cc66cc;">1</span><span style="color: #66cc66;">&#41;</span> <span style="color: #66cc66;">%</span> <span style="color: #66cc66;">&#40;</span><span style="color: #cc66cc;">8</span> <span style="color: #66cc66;">*</span> border<span style="color: #66cc66;">&#41;</span></div></li><li style="font-weight: normal; vertical-align:top;"><div style="font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;"><span style="color: #aa9900; font-weight: bold;">end</span></div></li></ol></pre></div>
-                    </div>
-                </div>     
-            </div>
+
+    <div id="popUpReg" class="popUp">
+        <span id="close">X</span>
+        <h4>Регистрация нового пользователя:</h4>
+        <div class="form-group">
+          <label for="inputRegLogin">Логин: (3 <= длина имени <= 15)</label>
+          <input type="text" class="form-control" id="inputRegLogin" placeholder="Введите логин">
         </div>
+        <div class="form-group">
+          <label for="inputRegPassword">Пароль: (не более 16 символов, но более 5)</label>
+          <input type="password" class="form-control" id="inputRegPassword" placeholder="Введите пароль">
+        </div>
+        <button id="submit-reg" class="btn btn-default">Зарегистрироваться</button>
     </div>
+    <div id="popUpLogin" class="popUp">
+        <span id="close">X</span>
+        <h4>Авторизация:</h4>
+        <div class="form-group">
+          <label for="inputLogin">Введите ваш логин:</label>
+          <input type="text" class="form-control" id="inputLogin" placeholder="Введите логин">
+        </div>
+        <div class="form-group">
+          <label for="inputPassword">Введите ваш пароль:</label>
+          <input type="password" class="form-control" id="inputPassword" placeholder="Введите пароль">
+        </div>
+        <button id="submit-login" class="btn btn-default">Войти</button>
+    </div>
+    <div id="overlay"></div>
+
     <script src="jquery-3.2.1.js"></script>
-    <script src="canvas.js"></script>
-    <script type="text/javascript">
-        var editor = CodeMirror.fromTextArea(codeArea, {
-            lineNumbers: true,
-            mode: 'lua',
-            tabSize: 2,
-        });
-    </script>
+    <script src="jquery.session.js"></script>
+    <script src="registration.js"></script>
+    <script src="login.js"></script>
     <script>
-        setInterval(createListPlayers, 1000);
-        function createPlayerLink(word){
-          $("#nickname").empty();
-          $("#nickname").val(word);
-        }
-        $("#sendButton").click(function(){
-            var nick = $("#nickname").val(); 
-            if (nick.length < 4){
-                alert("Давайте введем ник подлиннее, а? Хотя бы символа 4.");
-                return;
-            } 
-            if (nick.length > 25){
-                alert("Давайте без фанатизма. 25 символов в никнейме максимум.");
-                return;
-            }
-            var code = editor.getValue();
-            $("#sendButton").text('Sending...');
-            $("#sendButton").prop('disabled', true);
-            $("#nickname").prop('disabled', true);
-            $.post("http://progra2r.bget.ru/handler.php", 
-                {
-                    nick: nick, 
-                    code: code
-                }, 
-                function(data){
-                    $("#sendButton").text('Done!');
-                }
-            );
+        //alert($.session.get('pass'));
+        //if ($.session.get('pass') != undefined){
+        //    $("#inputPassword").val($.session.get('pass'));
+        //}
+        $.session.clear();
+        $(document).ready(function() { 
+            $('#reg').click( function(event){ 
+                event.preventDefault(); 
+                $('#overlay').fadeIn(250, 
+                    function(){
+                        $('#popUpReg') 
+                            .css('display', 'block') 
+                            .animate({opacity: 1, top: '35%'}, 490); 
+                });
+            });
+            $('#close, #overlay').click( function(){ 
+                $('#popUpReg')
+                    .animate({opacity: 0, top: '35%'}, 490, 
+                        function(){ 
+                            $(this).css('display', 'none'); 
+                            $('#overlay').fadeOut(220); 
+                        }
+                    );
+            });
+            $('#login').click( function(event){ 
+                event.preventDefault(); 
+                $('#overlay').fadeIn(250, 
+                    function(){
+                        $('#popUpLogin') 
+                            .css('display', 'block') 
+                            .animate({opacity: 1, top: '35%'}, 490); 
+                });
+            });
+            $('#close, #overlay').click( function(){
+                $('#popUpLogin')
+                    .animate({opacity: 0, top: '35%'}, 490, 
+                        function(){ 
+                            $(this).css('display', 'none'); 
+                            $('#overlay').fadeOut(220); 
+                        }
+                    );
+            });
         });
     </script>
-    <script src="socket.js"></script>
-    <!--<script src="form.js"></script>-->
 </body>
 </html>
