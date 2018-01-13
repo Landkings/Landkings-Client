@@ -1,8 +1,8 @@
 <?php
-    session_start();
-    if (isset($_SESSION['login'])){
-        header("Location: game.php");
-    }
+    //session_start();
+    //if (isset($_SESSION['login'])){
+    //    header("Location: game.php");
+    //}
 ?>
 <!doctype html5>
 <html>
@@ -54,7 +54,7 @@
     </style>
 
 </head>
-<body>
+<body style="background-image: url(data/bg/bg1.jpg); background-position: center; background-repeat: no-repeat; background-size: cover;">
     <div class="container-fluid">
         <div class="row">
             <nav class="navbar navbar-default">
@@ -77,14 +77,14 @@
         </div>
     </div>
     
-    <div class="container">
+    <div class="container" style="border: 1px solid #ccc; padding: 30px; background-color: white; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
         <div class="row">
             <div class="col-lg-12">
                 <h3>Добро пожаловать в LandKings, странник</h3>
                 <h4>Ты уже записался в наши ряды? Сделай это зарегистрировашись или назовись, я найду тебя в списке</h4>
             </div>
             <div class="col-lg-12">
-                <button class="btn btn-default" id="login">Войти</button>
+                <button class="btn btn-warning" id="login">Войти</button>
                 <button class="btn btn-success" id="reg">Зарегистрироваться</button>
             </div>
         </div>
