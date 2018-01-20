@@ -1,8 +1,8 @@
 <?php
-    //session_start();
-    //if (isset($_SESSION['login'])){
-    //    header("Location: game.php");
-    //}
+    session_start();
+    if (isset($_SESSION['login'])){
+        header("Location: game.php");
+    }
 ?>
 <!doctype html5>
 <html>
@@ -69,6 +69,7 @@
                     </div>
                     <div class="collapse navbar-collapse" id="navbar-main">
                         <ul class="nav navbar-nav pull-right">
+                            <li><a href="/todo">ТАСКИ</a></li>
                             <li class="active"><a href="index.php">Главная</a></li>
                         </ul>
                     </div>

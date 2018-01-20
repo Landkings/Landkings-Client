@@ -31,6 +31,19 @@
                 $_SESSION['id'] = $myrow['id'];
                 //$_SESSION['pass'] = $myrow['password'];
                 echo json_encode($_SESSION);
+                $_SESSION["token"] = md5(rand(0, PHP_INT_MAX));
+                $secret = "3435";
+                $data = $secret."l".$_SESSION["login"].">".$_SESSION["token"];    
+                $token = $_SESSION['token'];
+
+                $result = mysqli_query($db, "UPDATE users SET token = '$token' WHERE login = '$login' ");
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "http://5.100.95.19:19997");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                $result = curl_exec ($ch);
+                curl_close ($ch);
+
             }
             else {
                 echo "Извините, введённый вами логин или пароль неверный";

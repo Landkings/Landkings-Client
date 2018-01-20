@@ -45,3 +45,10 @@ textarea{
 .nicks:hover{
 	text-decoration: underline;
 };
+
+.player_info{
+	position: absolute;
+	width: 200px;
+	right: 220px;
+	top: 100px;
+}

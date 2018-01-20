@@ -80,17 +80,24 @@ var tileMap;
 //}
 
 
+//
+
 
 function createListPlayers(){
   $("#list_players").empty();
   $("#cnt_of_players").empty();
   $("#cnt_of_players").append("(" + all_players.length + ")");
   for (var i = 0; i < all_players.length; i++){
+    var str = "(x:" + all_players[i].x + ", y:" + all_players[i].y + ")<br>" + 
+        '<div class="progress"><div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ' + all_players[i].hp + '%;"></div></div>' + 
+        '<div class="progress"><div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ' + all_players[i].st + '%;"></div></div>' + 
+        '</p></div>';
     if ($("#nickname").val() == all_players[i].id){
-      $("#list_players").append("<div class='col-lg-2 col-md-2'><p class='text-muted' style='color: #f00;' align='center'><strong>" + all_players[i].id + "</strong><br>(x:" + all_players[i].x + ", y:" + all_players[i].y + ")</p></div>");
+      $("#list_players").append("<div class='col-lg-2 col-md-2'><p class='text-muted' style='color: #f00;' align='center'><strong>" + all_players[i].id + "</strong><br>" + str);
     }
-    else
-      $("#list_players").append('<div class="col-lg-2 col-md-2" onClick="createPlayerLink(\'' + all_players[i].id + '\');"><p class="text-muted" align="center" class="nicks"><strong><font color="#476dd6">' + all_players[i].id + "</font></strong><br>(x:" + all_players[i].x + ", y:" + all_players[i].y + ")</p></div>");
+    else{ 
+      $("#list_players").append('<div class="col-lg-2 col-md-2" onClick="createPlayerLink(\'' + all_players[i].id + '\');"><p class="text-muted" align="center" class="nicks"><strong><font color="#476dd6">' + all_players[i].id + "</font></strong><br>" + str);
+    }
   }
 }
 
@@ -150,7 +157,6 @@ function canvasApp () {
 
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 37) {
-      console.log("kek");
       camera.x -= 48;
     }
     else if(event.keyCode == 39) {
