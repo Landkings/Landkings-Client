@@ -118,89 +118,105 @@
                 <div class="col-lg-5 col-md-5" style="box-sizing: border-box; padding-left: 25px; padding-right: 20px;">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 players-list">
-                            <h4 align="center"><strong>Документация:</strong></h4><hr>
+                            <h4 align="center"><strong>Мини-Документация:</strong></h4><hr>
                             <pre>
-                                Enums:
-                                    Action:
-                                        Move
-                                        Attack
-                                        Block
-                                        Empty
-                                
-                                    Direction:
-                                        Up
-                                        Right
-                                        Down
-                                        Left
-                                        Unknown
-                                
-                                    AttackType:
-                                        Fast
-                                        Strong
-                                
-                                    AttackDirection:
-                                        Head
-                                        Torso
-                                        Legs
-                                
-                                    MovementType:
-                                        Default
-                                        Sprint
-                                
-                                    Parameters:
-                                        MovementSpeed
-                                        AttackSpeed
-                                        AttackRange
-                                        HitPoints
-                                        StamingPoints
-                                        AttackDamage
-                                        VisionRange
-                                        StaminaCostReduction
-                                        StaminaRegenFrequency
-                                
-                                
-                                Global functions:
-                                    setAction(Action)              
-                                    getAction()            
-                                    setDirection(Direction)
-                                    getDirection()
-                                    setTarget(Target)             
-                                    getTarget()              
-                                    getPosition()            
-                                    getStamina()             
-                                    getHp()                  
-                                    setAttackType(AttackType)
-                                    setMovementType(MovementType)        
-                                    getMovementType()        
-                                    setAttackDirection(AttackDirection)     
-                                    setBlockDirection(AttackDirection)      
-                                    getMe()                  
-                                    getAttackStaminaCost()   
-                                    getMoveStaminaCost()     
-                                    getBlockStaminaCost()    
-                                    getSprintStaminaCost()   
-                                    levelUp(Parameter)                
-                                    getCurrentExp()          
-                                    getNextLevelExp()        
-                                    getAvailableSkillPoints()
-                                    getParameterLevelUpCost(Parameter)
-                                    canMove(Direction)  
-                                    canAttack(Target)
-                                
-                                Scene methods:
-                                    getObjects()
-                                    getSafeZone()
-                                
-                                Character methods:
-                                    getPosition()
-                                
-                                SafeZone methods:
-                                    getPosition()
-                                    getRadius()
-                                
-                                Vec2i methods:
-                                    getX()
-                                    getY()
+----------------------------------------
+Enums:
+
+Action:
+    Move
+    Attack
+    Block
+    Empty
+    
+Direction:
+    Up
+    Right
+    Down
+    Left
+    Unknown
+
+AttackType:
+    Fast
+    Strong
+
+AttackDirection:
+    Head
+    Torso
+    Legs
+
+MovementType:
+    Default
+    Sprint
+
+Parameters:
+    MovementSpeed
+    AttackSpeed
+    AttackRange
+    HitPoints
+    StamingPoints
+    AttackDamage
+    VisionRange
+    StaminaCostReduction
+    StaminaRegenFrequency
+
+ObjectType:
+    Player
+    HealingItem
+    ExpItem
+
+
+-----------------------------------------
+
+
+Global functions:
+    setAction(Action)              
+    getAction()            
+    setDirection(Direction)
+    getDirection()
+    setTarget(Target)             
+    getTarget()              
+    getPosition()            
+    getStamina()             
+    getHp()                  
+    setAttackType(AttackType)
+    setMovementType(MovementType)        
+    getMovementType()        
+    setAttackDirection(AttackDirection)     
+    setBlockDirection(AttackDirection)      
+    getMe()                  
+    getAttackStaminaCost()   
+    getMoveStaminaCost()     
+    getBlockStaminaCost()    
+    getSprintStaminaCost()   
+    levelUp(Parameter)                
+    getCurrentExp()          
+    getNextLevelExp()        
+    getAvailableSkillPoints()
+    getParameterLevelUpCost(Parameter)
+    canMove(Direction)  
+    canAttack(Target)
+
+Scene methods:
+    getObjects()
+    getSafeZone()
+
+Character methods:
+    getPosition()
+    getObjectType()
+
+Item methods:
+    getObjectType()
+    getPosition()
+
+SafeZone methods:
+    getPosition()
+    getRadius()
+
+Vec2i methods:
+    getX()
+    getY()
+
 
                             </pre>
                         </div>
@@ -208,6 +224,10 @@
                 </div>
         </div>
     </div>
+    <?php
+        $sessid = $_SESSION["token"];
+        echo("<script>var sessid = '$sessid';</script>");
+    ?>
     <script src="jquery-3.2.1.js"></script>
     <script src="jquery.session.js"></script>
     <script src="canvas.js"></script>
@@ -221,7 +241,7 @@
             tabSize: 2,
         });
     </script>
-    <script>
+    <script type="text/javascript">
         setInterval(createListPlayers, 1000);
         function createPlayerLink(word){
           $("#nickname").empty();
@@ -249,11 +269,7 @@
             );
         });
     </script>
-<?php
-    $sessid = $_SESSION["token"];
-    echo("<script>var sessid = '$sessid';</script>");
-?>
-    <script src="socket.js"></script>
+    <!--<script src="socket.js"></script>-->
     <!--<script src="form.js"></script>-->
 </body>
 </html>

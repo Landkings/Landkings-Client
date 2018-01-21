@@ -104,7 +104,7 @@ function createListPlayers(){
         '<div class="progress"><div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: ' + all_players[i].st + '%;"></div></div>' + 
         '</p></div>';
     if ($("#nickname").val() == all_players[i].id){
-      $("#list_players").append("<div class='col-lg-2 col-md-2'><p class='text-muted' style='color: #f00;' align='center'><strong>" + all_players[i].id + "</strong><br>" + str);
+      $("#list_players").append("<div class='col-lg-2 col-md-2 my-hp-st-bars-in-list'><p class='text-muted' style='color: #f00;' align='center'><strong>" + all_players[i].id + "</strong><br>" + str);
     }
     else{ 
       $("#list_players").append('<div class="col-lg-2 col-md-2" onClick="createPlayerLink(\'' + all_players[i].id + '\');"><p class="text-muted" align="center" class="nicks"><strong><font color="#476dd6">' + all_players[i].id + "</font></strong><br>" + str);
@@ -113,6 +113,9 @@ function createListPlayers(){
 }
 
 function canvasApp () {
+
+  var socket = new WebSocket("ws://5.100.95.19:19999", [sessid]);
+
   var myCanvas = document.getElementById('myCanvas');
   var playersCanvas = document.getElementById('playersCanvas');
   var obstaclesCanvas = document.getElementById('obstaclesCanvas');
@@ -257,33 +260,31 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  while (!mapReceived)
-    continue;
-    var arr = mapObject.tileMap;
-    var ht = mapObject.height;
-    var wh = width = mapObject.width;
-    width = wh * 48;
-    height = ht * 48;
-    tileMap = new Array(Math.floor(height / 48));
-    for (var i = 0; i < ht; i++) {
-      tileMap[i] = new Array(Math.floor(width / 48));
-      for (var j = 0; j < wh; j++) {
-        tileMap[i][j] = arr[i * wh + j];
-      }
-    }   
-      drawScreen();
-      socket.onmessage = function(event) 
-      {
-        var obj = JSON.parse(event.data);
-        console.log(obj.messageType);
-        if (obj.messageType == "loadObjects") 
-        {
-          all_players = obj.players;
-          drawScreen(obj.circle);
-          drawPlayers(obj.players);
-          drawItems(obj.items); 
-          changeStatements(obj.players);
+  socket.onmessage = function(event) {
+    var obj = JSON.parse(event.data);
+    console.log(obj.messageType);
+    if (obj.messageType == "loadObjects") {
+      all_players = obj.players;
+      drawScreen(obj.circle);
+      drawPlayers(obj.players);
+      drawItems(obj.items); 
+      changeStatements(obj.players);
+    }
+    else if (obj.messageType == "loadMap") {
+      var arr = obj.tileMap;
+      var ht = obj.height;
+      var wh = width = obj.width;
+      width = wh * 48;
+      height = ht * 48;
+      tileMap = new Array(Math.floor(height / 48));
+      for (var i = 0; i < ht; i++) {
+        tileMap[i] = new Array(Math.floor(width / 48));
+        for (var j = 0; j < wh; j++) {
+          tileMap[i][j] = arr[i * wh + j];
         }
-      };
+      }
+      drawScreen();
+    }
   };
   //drawScreen();  
+}
