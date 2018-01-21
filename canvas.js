@@ -257,31 +257,33 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  socket.onmessage = function(event) {
-    var obj = JSON.parse(event.data);
-    console.log(obj.messageType);
-    if (obj.messageType == "loadObjects") {
-      all_players = obj.players;
-      drawScreen(obj.circle);
-      drawPlayers(obj.players);
-      drawItems(obj.items); 
-      changeStatements(obj.players);
-    }
-    else if (obj.messageType == "loadMap") {
-      var arr = obj.tileMap;
-      var ht = obj.height;
-      var wh = width = obj.width;
-      width = wh * 48;
-      height = ht * 48;
-      tileMap = new Array(Math.floor(height / 48));
-      for (var i = 0; i < ht; i++) {
-        tileMap[i] = new Array(Math.floor(width / 48));
-        for (var j = 0; j < wh; j++) {
-          tileMap[i][j] = arr[i * wh + j];
-        }
+  while (!mapReceived)
+    continue;
+    var arr = mapObject.tileMap;
+    var ht = mapObject.height;
+    var wh = width = mapObject.width;
+    width = wh * 48;
+    height = ht * 48;
+    tileMap = new Array(Math.floor(height / 48));
+    for (var i = 0; i < ht; i++) {
+      tileMap[i] = new Array(Math.floor(width / 48));
+      for (var j = 0; j < wh; j++) {
+        tileMap[i][j] = arr[i * wh + j];
       }
+    }   
       drawScreen();
-    }
+      socket.onmessage = function(event) 
+      {
+        var obj = JSON.parse(event.data);
+        console.log(obj.messageType);
+        if (obj.messageType == "loadObjects") 
+        {
+          all_players = obj.players;
+          drawScreen(obj.circle);
+          drawPlayers(obj.players);
+          drawItems(obj.items); 
+          changeStatements(obj.players);
+        }
+      };
   };
   //drawScreen();  
-}
