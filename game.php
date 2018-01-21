@@ -161,6 +161,10 @@
             );
         });
     </script>
+<?php
+    $sessid = $_SESSION["token"];
+    echo("<script>var sessid = $sessid;</script>");
+?>
     <script src="socket.js"></script>
     <!--<script src="form.js"></script>-->
 </body>
