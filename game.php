@@ -56,10 +56,14 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-5 col-md-6 col-sm-8 col-xs-12" style="margin-top: 645px;">
-                        <p class="text-muted pull-left nick-bar" style="float: left;">Ваше имя:</p> <p><strong><font id="info-nick" class="text-primary"></font></strong></p>
+                        <p class="text-muted pull-left nick-bar" style="float: left;">Ваше имя:</p> 
+                        <p><strong><font id="info-nick" class="text-primary"></font></strong></p>
+                        <p class="text-muted pull-left nick-bar" style="float: left;">Уровень: </p>  
+                        <p><strong><font id="info-level" class="text-primary"></font></strong></p>
+
                     </div>
                 </div>
-                <div class="row">
+                <!--<div class="row">
                     <div class="col-lg-5 col-md-6 col-sm-8 col-xs-12" style="margin-top: 5px;">
                         <p class="text-danger pull-left health-bar">Здоровье: </p>
                         <div class="progress">
@@ -76,7 +80,7 @@
                             </div>  
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
@@ -115,6 +119,90 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12 players-list">
                             <h4 align="center"><strong>Документация:</strong></h4><hr>
+                            <pre>
+                                Enums:
+                                    Action:
+                                        Move
+                                        Attack
+                                        Block
+                                        Empty
+                                
+                                    Direction:
+                                        Up
+                                        Right
+                                        Down
+                                        Left
+                                        Unknown
+                                
+                                    AttackType:
+                                        Fast
+                                        Strong
+                                
+                                    AttackDirection:
+                                        Head
+                                        Torso
+                                        Legs
+                                
+                                    MovementType:
+                                        Default
+                                        Sprint
+                                
+                                    Parameters:
+                                        MovementSpeed
+                                        AttackSpeed
+                                        AttackRange
+                                        HitPoints
+                                        StamingPoints
+                                        AttackDamage
+                                        VisionRange
+                                        StaminaCostReduction
+                                        StaminaRegenFrequency
+                                
+                                
+                                Global functions:
+                                    setAction(Action)              
+                                    getAction()            
+                                    setDirection(Direction)
+                                    getDirection()
+                                    setTarget(Target)             
+                                    getTarget()              
+                                    getPosition()            
+                                    getStamina()             
+                                    getHp()                  
+                                    setAttackType(AttackType)
+                                    setMovementType(MovementType)        
+                                    getMovementType()        
+                                    setAttackDirection(AttackDirection)     
+                                    setBlockDirection(AttackDirection)      
+                                    getMe()                  
+                                    getAttackStaminaCost()   
+                                    getMoveStaminaCost()     
+                                    getBlockStaminaCost()    
+                                    getSprintStaminaCost()   
+                                    levelUp(Parameter)                
+                                    getCurrentExp()          
+                                    getNextLevelExp()        
+                                    getAvailableSkillPoints()
+                                    getParameterLevelUpCost(Parameter)
+                                    canMove(Direction)  
+                                    canAttack(Target)
+                                
+                                Scene methods:
+                                    getObjects()
+                                    getSafeZone()
+                                
+                                Character methods:
+                                    getPosition()
+                                
+                                SafeZone methods:
+                                    getPosition()
+                                    getRadius()
+                                
+                                Vec2i methods:
+                                    getX()
+                                    getY()
+
+                            </pre>
                         </div>
                     </div>
                 </div>
@@ -163,7 +251,7 @@
     </script>
 <?php
     $sessid = $_SESSION["token"];
-    echo("<script>var sessid = $sessid;</script>");
+    echo("<script>var sessid = '$sessid';</script>");
 ?>
     <script src="socket.js"></script>
     <!--<script src="form.js"></script>-->

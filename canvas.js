@@ -12,6 +12,15 @@ knightSet.onload = function () {
 };
 knightSet.src = "data/knight_asset.png";
 
+var itemsSet = new Image();
+itemsSet.onload = function () {
+    console.log(itemsSet.src);
+};
+itemsSet.src = "data/items.png";
+
+//ИТЕМЫ - РАЗМЕРЫ 48х48
+var apple = {x: 0, y: 0};
+
 var knight_up    = [ { x: 81, y: 0} ];
 var knight_down  = [ { x: 0,  y: 0} ];
 var knight_left  = [ { x: 27, y: 0} ];
@@ -44,6 +53,8 @@ function changeStatements(players){
       var cur_stamina = players[i].st;
       $("#health").text(String(cur_health) + "/" + String(max_health));
       $("#stamina").text(String(cur_stamina) + "/" + String(max_stamina));
+      $("#info-level").empty();
+      $("#info-level").append(players[i].lv);
     }
   }
   return flag;
@@ -125,7 +136,17 @@ function canvasApp () {
 
 
 
-  function drawScreen() {
+  function drawCircle(main_circle){
+    ctx.beginPath();
+    ctx.arc(main_circle.x - camera.x, main_circle.y - camera.y, main_circle.r, 0, 2 * Math.PI, false);
+    ctx.lineWidth = 10;
+    ctx.strokeStyle = 'rgba(70, 70, 170, 0.7)';
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(100, 150, 185, 0.0)';
+    ctx.fill();
+  }
+
+  function drawScreen(main_circle) {
     var players_x = 0;
     var players_y = 0;
     for (var i = 0; i < all_players.length; i++){
@@ -153,9 +174,10 @@ function canvasApp () {
       }
       y = y + dy;
     }
+    drawCircle(main_circle);
   }
 
-document.addEventListener('keydown', function(event) {
+  document.addEventListener('keydown', function(event) {
     if(event.keyCode == 37) {
       camera.x -= 48;
     }
@@ -169,7 +191,7 @@ document.addEventListener('keydown', function(event) {
       camera.y += 48;
     }
     drawScreen();
-});
+  });
 
 /*
 obsctx.beginPath();
@@ -184,65 +206,82 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
     if (sid == 3) return knight_left[0].x;
   }
 
+  function drawItems(items){
+    obsctx.beginPath();
+    obsctx.clearRect(0, 0, obstaclesCanvas.width, obstaclesCanvas.height);
+    obsctx.closePath();
+    for(var i = 0; i < items.length; i++){
+      item = {};
+      //Яблоко
+      if (items[i].sid == 99){
+        item = apple;
+      }
+
+
+      obsctx.beginPath();
+      obsctx.drawImage(itemsSet, item.x, item.y, 48, 48, items[i].x - camera.x, items[i].y - camera.y, 48, 48);
+      obsctx.closePath();
+    }
+  }
+
   function drawPlayers(players) {
-        plctx.beginPath();
-        plctx.clearRect(0, 0, playersCanvas.width, playersCanvas.height);
-        plctx.closePath();
-        for (var i = 0; i < players.length; ++i){
-            plctx.beginPath();
-
-
-            plctx.drawImage(knightSet, get_knight_offset_x(players[i].sid), 0, 27, 32, players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 27, 32);
-            
-            plctx.closePath();
-            plctx.beginPath();
-            if ($("#nickname").val() == players[i].id){
-              plctx.fillStyle = "#000";
-              plctx.fillStroke = "#000";
-              plctx.font = "bold 18px Arial";
-              plctx.fillText(players[i].id, players[i].x - 12 - camera.x - 5, players[i].y - 5 - camera.y - 5);
-              plctx.fillText(players[i].id, players[i].x - 8 - camera.x - 5, players[i].y - 5 - camera.y - 5);
-              plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 5, players[i].y - 5 - camera.y - 3);
-              plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 5, players[i].y - 5 - camera.y - 7);
-              plctx.fillStyle = "#f00";
-            }
-            else{
-              plctx.fillStyle = "#fff";
-              plctx.fillStroke = "#000";
-              plctx.font = "14px Arial";
-            }
-            plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 5, players[i].y - 10 - camera.y);
-            plctx.closePath();
-        }
+    plctx.beginPath();
+    plctx.clearRect(0, 0, playersCanvas.width, playersCanvas.height);
+    plctx.closePath();
+    for (var i = 0; i < players.length; ++i){
+      plctx.beginPath();
+      plctx.drawImage(knightSet, get_knight_offset_x(players[i].sid), 0, 27, 32, players[i].x - 10 - camera.x, players[i].y - 10 - camera.y, 27, 32);
+      
+      plctx.closePath();
+      plctx.beginPath();
+      if ($("#nickname").val() == players[i].id){
+        plctx.fillStyle = "#000";
+        plctx.fillStroke = "#000";
+        plctx.font = "bold 18px Arial";
+        plctx.fillText(players[i].id, players[i].x - 12 - camera.x - 5, players[i].y - 5 - camera.y - 5);
+        plctx.fillText(players[i].id, players[i].x - 8 - camera.x - 5, players[i].y - 5 - camera.y - 5);
+        plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 5, players[i].y - 5 - camera.y - 3);
+        plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 5, players[i].y - 5 - camera.y - 7);
+        plctx.fillStyle = "#f00";
+      }
+      else{
+        plctx.fillStyle = "#fff";
+        plctx.fillStroke = "#000";
+        plctx.font = "14px Arial";
+      }
+      plctx.fillText(players[i].id, players[i].x - 10 - camera.x - 5, players[i].y - 10 - camera.y);
+      plctx.closePath();
+    }
   }
 
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   socket.onmessage = function(event) {
-        var obj = JSON.parse(event.data);
-        console.log(obj.messageType);
-        if (obj.messageType == "loadObjects") {
-            all_players = obj.players;
-            drawScreen();
-            drawPlayers(obj.players);
-            changeStatements(obj.players);
+    var obj = JSON.parse(event.data);
+    console.log(obj.messageType);
+    if (obj.messageType == "loadObjects") {
+      all_players = obj.players;
+      drawScreen(obj.circle);
+      drawPlayers(obj.players);
+      drawItems(obj.items); 
+      changeStatements(obj.players);
+    }
+    else if (obj.messageType == "loadMap") {
+      var arr = obj.tileMap;
+      var ht = obj.height;
+      var wh = width = obj.width;
+      width = wh * 48;
+      height = ht * 48;
+      tileMap = new Array(Math.floor(height / 48));
+      for (var i = 0; i < ht; i++) {
+        tileMap[i] = new Array(Math.floor(width / 48));
+        for (var j = 0; j < wh; j++) {
+          tileMap[i][j] = arr[i * wh + j];
         }
-        else if (obj.messageType == "loadMap") {
-          var arr = obj.tileMap;
-          var ht = obj.height;
-          var wh = width = obj.width;
-          width = wh * 48;
-          height = ht * 48;
-          tileMap = new Array(Math.floor(height / 48));
-          for (var i = 0; i < ht; i++) {
-            tileMap[i] = new Array(Math.floor(width / 48));
-            for (var j = 0; j < wh; j++) {
-              tileMap[i][j] = arr[i * wh + j];
-            }
-          }
-          drawScreen();
-        }
+      }
+      drawScreen();
+    }
   };
   //drawScreen();  
 }

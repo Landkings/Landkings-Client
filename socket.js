@@ -2,18 +2,18 @@ var socket = new WebSocket("ws://5.100.95.19:19999", [sessid]);
 
 socket.onopen = function() 
 {
-    alert('Connection established');
+    //alert('Connection established');
 };
 
 socket.onclose = function(event) 
 {
     if (event.wasClean) 
     {  
-        alert('Closed clean');
+        //alert('Closed clean');
     } 
     else 
     {
-        alert('Closed');
+        //alert('Closed');
     }
-    alert('Code: ' + event.code + ' reason: ' + event.reason);
+    //alert('Code: ' + event.code + ' reason: ' + event.reason);
 };
