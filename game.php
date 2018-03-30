@@ -63,7 +63,7 @@
                                 }
                             };
                             window.addEventListener("keydown", arrow_keys_handler, false);
-                    </script>>
+                    </script>
                 </div>
                 <div class="row">
                     <div class="col-lg-5 col-md-6 col-sm-8 col-xs-12" style="margin-top: 645px;">
@@ -265,7 +265,7 @@ Vec2i methods:
             $("#sendButton").text('Sending...');
             $("#sendButton").prop('disabled', true);
             $("#nickname").prop('disabled', true);
-            $.post("http://localhost/Landkings-Client/handler.php", 
+            $.post("http://landkings/handler.php", 
                 {
                     nick: nick, 
                     code: code
