@@ -12,6 +12,12 @@ knightSet.onload = function () {
 };
 knightSet.src = "data/knight_asset.png";
 
+var zombieSet = new Image();
+knightSet.onload = function () {
+    console.log(zombieSet.src);
+};
+zombieSet.src = "data/zombie_asset.png";
+
 var itemsSet = new Image();
 itemsSet.onload = function () {
     console.log(itemsSet.src);
@@ -25,6 +31,11 @@ var knight_up    = [ { x: 81, y: 0} ];
 var knight_down  = [ { x: 0,  y: 0} ];
 var knight_left  = [ { x: 27, y: 0} ];
 var knight_right = [ { x: 54, y: 0} ];
+
+var zombie_up    = [ { x: 69, y: 0} ];
+var zombie_down  = [ { x: 0,  y: 0} ];
+var zombie_left  = [ { x: 23, y: 0} ];
+var zombie_right = [ { x: 46, y: 0} ];
 
 var grass = [ { x: 0, y : 384}, {x : 48, y : 384} ];
 var tree = [ { x: 192, y : 432} ];
@@ -114,16 +125,18 @@ function createListPlayers(){
 
 function canvasApp () {
 
-  var socket = new WebSocket("ws://5.100.95.19:19999", [sessid]);
+  var socket = new WebSocket("ws://localhost:19999", [sessid]);
 
   var myCanvas = document.getElementById('myCanvas');
   var playersCanvas = document.getElementById('playersCanvas');
+  var npcsCanvas = document.getElementById('npcsCanvas');
   var obstaclesCanvas = document.getElementById('obstaclesCanvas');
   if (!canvasSupport(myCanvas)) {
       return;
   }
   var ctx = myCanvas.getContext('2d');
   var plctx = playersCanvas.getContext('2d');
+  var npcsctx = npcsCanvas.getContext('2d');
   var obsctx = obstaclesCanvas.getContext('2d');
   //ctx.save();
   myCanvas.width = 600;
@@ -132,6 +145,8 @@ function canvasApp () {
   obstaclesCanvas.height = 600;
   playersCanvas.width = 600;
   playersCanvas.height = 600;
+  npcsCanvas.width = 600;
+  npcsCanvas.height = 600;
   //ctx.transform( 1, 0.5, -1, 0.5, 160, 0 );
   //obsctx.translate(-500, -600);
   //ctx.translate(-500, -600);
@@ -209,6 +224,13 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
     if (sid == 3) return knight_left[0].x;
   }
 
+  function get_zombie_offset_x(sid){
+    if (sid == 0) return zombie_up[0].x;
+    if (sid == 1) return zombie_right[0].x;
+    if (sid == 2) return zombie_down[0].x;
+    if (sid == 3) return zombie_left[0].x;
+  }
+
   function drawItems(items){
     obsctx.beginPath();
     obsctx.clearRect(0, 0, obstaclesCanvas.width, obstaclesCanvas.height);
@@ -220,10 +242,20 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
         item = apple;
       }
 
-
       obsctx.beginPath();
       obsctx.drawImage(itemsSet, item.x, item.y, 48, 48, items[i].x - camera.x, items[i].y - camera.y, 48, 48);
       obsctx.closePath();
+    }
+  }
+
+  function drawNpcs(npcs) {
+    npcsctx.beginPath();
+    npcsctx.clearRect(0, 0, npcsCanvas.width, npcsCanvas.height);
+    npcsctx.closePath();
+    for (var i = 0; i < npcs.length; ++i){
+      npcsctx.beginPath();
+      npcsctx.drawImage(zombieSet, get_zombie_offset_x(npcs[i].sid), 0, 23, 32, npcs[i].x - 10 - camera.x, npcs[i].y - 10 - camera.y, 23, 32);    
+      npcsctx.closePath();
     }
   }
 
@@ -268,7 +300,9 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
       drawScreen(obj.circle);
       drawPlayers(obj.players);
       drawItems(obj.items); 
+      drawNpcs(obj.npcs);
       changeStatements(obj.players);
+      changeStatements(obj.npcs);
     }
     else if (obj.messageType == "loadMap") {
       var arr = obj.tileMap;
