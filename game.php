@@ -54,6 +54,16 @@
                     <canvas id="playersCanvas" width="600" height="600" style="position: absolute; top: 35; z-index: 2;"></canvas>
                     <canvas id="myCanvas" width="600" height="600" style="background: lightblue; position: absolute; top: 35; z-index: 0;"></canvas>
                     <canvas id="obstaclesCanvas" width="600" height="600" style="position: absolute; top: 35; z-index: 1;"></canvas>
+                    <script> 
+                            var arrow_keys_handler = function(e) {
+                                switch(e.keyCode){
+                                    case 37: case 39: case 38:  case 40: // Arrow keys
+                                    case 32: e.preventDefault(); break; // Space
+                                    default: break; // do not block other keys
+                                }
+                            };
+                            window.addEventListener("keydown", arrow_keys_handler, false);
+                    </script>>
                 </div>
                 <div class="row">
                     <div class="col-lg-5 col-md-6 col-sm-8 col-xs-12" style="margin-top: 645px;">
