@@ -165,6 +165,7 @@ ObjectType:
     Player
     HealingItem
     ExpItem
+    NPC
 
 
 -----------------------------------------
