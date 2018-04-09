@@ -50,6 +50,7 @@
             </div>
             <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
                 <div class="all-canvases">
+                    <canvas id="npcsCanvas" width="600" height="600" style="position: absolute; top: 35; z-index: 3;"></canvas>
                     <canvas id="playersCanvas" width="600" height="600" style="position: absolute; top: 35; z-index: 2;"></canvas>
                     <canvas id="myCanvas" width="600" height="600" style="background: lightblue; position: absolute; top: 35; z-index: 0;"></canvas>
                     <canvas id="obstaclesCanvas" width="600" height="600" style="position: absolute; top: 35; z-index: 1;"></canvas>
@@ -164,6 +165,7 @@ ObjectType:
     Player
     HealingItem
     ExpItem
+    NPC
 
 
 -----------------------------------------
@@ -253,7 +255,7 @@ Vec2i methods:
             $("#sendButton").text('Sending...');
             $("#sendButton").prop('disabled', true);
             $("#nickname").prop('disabled', true);
-            $.post("http://progra2r.bget.ru/handler.php", 
+            $.post("http://localhost/Landkings-Client/handler.php", 
                 {
                     nick: nick, 
                     code: code
