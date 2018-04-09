@@ -129,14 +129,12 @@ function canvasApp () {
 
   var myCanvas = document.getElementById('myCanvas');
   var playersCanvas = document.getElementById('playersCanvas');
-  var npcsCanvas = document.getElementById('npcsCanvas');
   var obstaclesCanvas = document.getElementById('obstaclesCanvas');
   if (!canvasSupport(myCanvas)) {
       return;
   }
   var ctx = myCanvas.getContext('2d');
   var plctx = playersCanvas.getContext('2d');
-  var npcsctx = npcsCanvas.getContext('2d');
   var obsctx = obstaclesCanvas.getContext('2d');
   //ctx.save();
   myCanvas.width = 600;
@@ -145,8 +143,6 @@ function canvasApp () {
   obstaclesCanvas.height = 600;
   playersCanvas.width = 600;
   playersCanvas.height = 600;
-  npcsCanvas.width = 600;
-  npcsCanvas.height = 600;
   //ctx.transform( 1, 0.5, -1, 0.5, 160, 0 );
   //obsctx.translate(-500, -600);
   //ctx.translate(-500, -600);
@@ -257,13 +253,13 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
   }
 
   function drawNpcs(npcs) {
-    npcsctx.beginPath();
-    npcsctx.clearRect(0, 0, npcsCanvas.width, npcsCanvas.height);
-    npcsctx.closePath();
+    plctx.beginPath();
+    // plctx.clearRect(0, 0, playersCanvas.width, playersCanvas.height);
+    plctx.closePath();
     for (var i = 0; i < npcs.length; ++i){
-      npcsctx.beginPath();
-      npcsctx.drawImage(zombieSet, get_zombie_offset_x(npcs[i].sid), 0, 23, 32, npcs[i].x - 10 - camera.x, npcs[i].y - 10 - camera.y, 23, 32);    
-      npcsctx.closePath();
+      plctx.beginPath();
+      plctx.drawImage(zombieSet, get_zombie_offset_x(npcs[i].sid), 0, 23, 32, npcs[i].x - 10 - camera.x, npcs[i].y - 10 - camera.y, 23, 32);    
+      plctx.closePath();
     }
   }
 
@@ -297,6 +293,11 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
     }
   }
 
+  function drawCharacters(obj){
+    drawPlayers(obj.players);  
+    drawNpcs(obj.npcs); 
+  }
+
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -306,9 +307,8 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
     if (obj.messageType == "loadObjects") {
       all_players = obj.players;
       drawScreen(obj.circle);
-      drawPlayers(obj.players);
-      drawItems(obj.items); 
-      drawNpcs(obj.npcs);
+      drawCharacters(obj);
+      drawItems(obj.items);
       changeStatements(obj.players);
       changeStatements(obj.npcs);
     }
