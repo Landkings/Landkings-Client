@@ -37,7 +37,7 @@ var zombie_down  = [ { x: 0,  y: 0} ];
 var zombie_left  = [ { x: 23, y: 0} ];
 var zombie_right = [ { x: 46, y: 0} ];
 
-var grass = [ { x: 0, y : 384}, {x : 48, y : 384} ];
+var grass = [ {x : 0, y : 384}, {x : 48, y : 384}, { x: 192, y : 48} ];
 var tree = [ { x: 192, y : 432} ];
 
 var red_mushroom = [ { x: 576, y: 336} ];
@@ -152,7 +152,13 @@ function canvasApp () {
   //ctx.translate(-500, -600);
   //plctx.transform( 1, 0.5, -1, 0.5, 160, 0 );
 
+function cameraX(x) {
+  return Math.min(Math.max(x, 0), myCanvas.width);
+}
 
+function cameraY(y) {
+  return Math.min(Math.max(y, 0), myCanvas.height);
+}
 
   function drawCircle(main_circle){
     ctx.beginPath();
@@ -169,8 +175,8 @@ function canvasApp () {
     var players_y = 0;
     for (var i = 0; i < all_players.length; i++){
       if (all_players[i].id == $("#nickname").val()){
-        camera.x = all_players[i].x - 290;
-        camera.y = all_players[i].y - 290;
+        camera.x = cameraX(all_players[i].x - 290);
+        camera.y = cameraY(all_players[i].y - 290);
       }
     }
     ctx.beginPath();  
@@ -208,6 +214,8 @@ function canvasApp () {
     else if (event.keyCode == 40) {
       camera.y += 48;
     }
+    camera.x = cameraX(camera.x);
+    camera.y = cameraY(camera.y);
     drawScreen();
   });
 
