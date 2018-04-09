@@ -50,15 +50,15 @@
             </div>
             <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
                 <div class="all-canvases">
-                    <canvas id="npcsCanvas" width="600" height="600" style="position: absolute; top: 35; z-index: 3;"></canvas>
+                    <!-- <canvas id="npcsCanvas" width="600" height="600" style="position: absolute; top: 35; z-index: 3;"></canvas> -->
                     <canvas id="playersCanvas" width="600" height="600" style="position: absolute; top: 35; z-index: 2;"></canvas>
                     <canvas id="myCanvas" width="600" height="600" style="background: lightblue; position: absolute; top: 35; z-index: 0;"></canvas>
                     <canvas id="obstaclesCanvas" width="600" height="600" style="position: absolute; top: 35; z-index: 1;"></canvas>
                     <script> 
-                            var arrow_keys_handler = function(e) {
+                            var arrow_keys_handler = function(e) { // block arrows from scrolling on page
                                 switch(e.keyCode){
                                     case 37: case 39: case 38:  case 40: // Arrow keys
-                                    case 32: e.preventDefault(); break; // Space
+                                    e.preventDefault(); break;
                                     default: break; // do not block other keys
                                 }
                             };
