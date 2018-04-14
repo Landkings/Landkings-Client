@@ -327,6 +327,11 @@ obsctx.drawImage(tileSet, tree[0].x, tree[0].y, 48, 48, 256 - camera.x, 256 - ca
       }
       drawScreen();
     }
+    else if (obj.messageType == "loadGameResult") {
+      if (obj.winner.id != "")
+        window.alert("Победил " + obj.winner.id + "!")
+      else window.alert("Монстры победили!");
+    }
   };
   //drawScreen();  
 }
